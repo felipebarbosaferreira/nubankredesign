@@ -2,10 +2,12 @@ import React from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
+import Splash from './src/views/Splash';
 import Home from './src/views/Home';
 
 const Routes = createAppContainer(
   createSwitchNavigator({
+    Splash,
     Home,
   })
 );

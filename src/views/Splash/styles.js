@@ -17,6 +17,13 @@ const styles = StyleSheet.create({
     text: {
         color: Colors.baseText,
     },
+
+    nuSymbol: {
+        width: 100,
+        height: 100,
+        position: 'absolute',
+        backgroundColor: Colors.background,
+    },
 })
 
 export default styles;

@@ -4,11 +4,10 @@
     "slug": "nubankredesing",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/icon.png",
+    "icon": "./src/assets/nu_symbol_offwhite.png",
     "splash": {
-      "image": "./src/assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#82269e"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -20,7 +19,7 @@
       "supportsTablet": true
     },
     "web": {
-      "favicon": "./src/assets/favicon.png"
+      "favicon": "./src/assets/nu_symbol_offwhite.png"
     }
   }
 }

@@ -9,7 +9,7 @@ export default function Home({ navigation }) {
     return (
         <View style={S.container}>
             <View style={S.content}>
-                <Text>Open up App.js to start working on your app!</Text>
+                <Text style={S.text}>Open up App.js to start working on your app!</Text>
                 <StatusBar style="auto" />
             </View>
         </View>
