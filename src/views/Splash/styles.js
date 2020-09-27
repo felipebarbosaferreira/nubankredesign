@@ -16,12 +16,13 @@ const styles = StyleSheet.create({
 
     text: {
         color: Colors.baseText,
+        fontSize: 18,
     },
 
     nuSymbol: {
+        position: 'absolute',
         width: 100,
         height: 100,
-        position: 'absolute',
         backgroundColor: Colors.background,
     },
 })
