@@ -20,6 +20,9 @@
     },
     "web": {
       "favicon": "./src/assets/nu_symbol_offwhite.png"
+    },
+    "android": {
+      "package": "com.github.felipebarbosaferreira.nubankredesing"
     }
   }
 }
