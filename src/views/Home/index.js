@@ -17,7 +17,7 @@ export default function Home({ navigation }) {
                 <Text style={S.text}>Open up App.js to start working on your app!</Text>
             </View>
             <ScrollView style={S.buttonsList} horizontal={true} showsHorizontalScrollIndicator={false}>
-                <View style={S.buttonCard}></View>
+                <View style={S.buttonCardFirst}></View>
                 <View style={S.buttonCard}></View>
                 <View style={S.buttonCard}></View>
                 <View style={S.buttonCard}></View>

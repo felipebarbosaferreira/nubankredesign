@@ -1,6 +1,15 @@
 import { StyleSheet } from 'react-native';
 import * as Colors from '../../styles/colors';
 
+
+const buttonCard = {
+    width: 90,
+    height: 90,
+    marginRight: 15,
+    borderRadius: 8,
+    backgroundColor: Colors.cardPurple,
+}
+
 const styles = StyleSheet.create({
     container: {
         display: 'flex',
@@ -34,16 +43,16 @@ const styles = StyleSheet.create({
     },
 
     buttonCard: {
-        flex: 1,
-        width: 90,
-        height: 90,
-        marginRight: 15,
-        borderRadius: 8,
-        backgroundColor: Colors.cardPurple,
+        ...buttonCard,
+    }, 
+
+    buttonCardFirst: {
+        ...buttonCard,
+        marginLeft: 15,
     }, 
 
     text: {
-        color: Colors.baseText,
+        color: Colors.darkText,
     },
 
     textUserName: {
