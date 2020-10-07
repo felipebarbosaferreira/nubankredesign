@@ -5,8 +5,26 @@ import nuSymbol from '../../assets/nu_symbol_offwhite.png';
 
 import S from './styles';
 
+import Carousel from '../../components/Carousel';
+
+
+
 export default function Home({ navigation }) {
     // TODO logic
+    const data = [
+        {
+            label: "Limite",
+            value: "Av",
+        },
+        {
+            label: "Fatura",
+            value: "Bv",
+        },
+        {
+            label: "Promo",
+            value: "Cv",
+        },
+    ]
     return (
         <View style={S.container}>
             <View style={S.hearder}>
@@ -14,9 +32,12 @@ export default function Home({ navigation }) {
                 <Text style={S.textUserName}>Felipe</Text>
             </View>
             <View style={S.content}>
-                <Text style={S.text}>Open up App.js to start working on your app!</Text>
+                <Carousel items={data}/>
             </View>
-            <ScrollView style={S.buttonsList} horizontal={true} showsHorizontalScrollIndicator={false}>
+            <ScrollView 
+                style={S.buttonsList} 
+                horizontal={true} 
+                showsHorizontalScrollIndicator={false} >
                 <View style={S.buttonCardFirst}></View>
                 <View style={S.buttonCard}></View>
                 <View style={S.buttonCard}></View>

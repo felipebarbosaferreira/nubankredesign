@@ -32,8 +32,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginVertical: 0,
-        marginHorizontal: 15,
-        backgroundColor: Colors.white,
+        marginHorizontal: 0,
     },
 
     buttonsList: {
@@ -65,6 +64,43 @@ const styles = StyleSheet.create({
         height: 60,
         width: 60,
         marginRight: 10,
+    },
+
+
+    carousel: {
+    },
+
+    scrollView: {
+    },
+
+    cardDark: {
+        backgroundColor: Colors.darkPurple,
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    cardLight: {
+        backgroundColor: Colors.white,
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    bulletsArea: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 10,
+        backgroundColor: Colors.background,
+    },
+
+    bullet: {
+        height: 10,
+        width: 10,
+        marginHorizontal: 5,
+        backgroundColor: Colors.white,
+        borderRadius: 20,
     },
 })
 
