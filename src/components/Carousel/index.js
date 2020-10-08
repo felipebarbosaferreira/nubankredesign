@@ -75,17 +75,23 @@ const Carousel = ({ items = [], itemsPerInterval = 1, style = {}, }) => {
                             // <View style={S.card} key={index}>
                             //     <Text style={S.text}>{item.label}</Text>
                             // </View>
-                            <View style={S.card}>
+                            <View style={S.card} key={index} >
                                 <View style={S.container}>
                                     <View style={S.content}>
-                                        <FontAwesomeIcon icon={ getIconByKey(22) } size={24} color='#B5B5B5' />
-                                        <Text>Cartão de Crédito</Text>
+                                        <View style={S.labelArea}>
+                                            <FontAwesomeIcon icon={ getIconByKey(22) } size={24} color='#B5B5B5' />
+                                            <Text style={S.labelText}>Cartão de Crédito</Text>
+                                        </View>
 
-                                        <Text>FATURA ATUAL</Text>
-                                        <Text>R$ 339,04</Text>
+                                        <View style={S.informationArea}>
+                                            <Text style={S.informationLabel}>Fatura atual</Text>
+                                            <Text style={S.informationTextPrimary}>R$ 339,04</Text>
+                                        </View>
 
-                                        <Text>Limite disponivel</Text>
-                                        <Text>R$ 1.543,96</Text>
+                                        <View>
+                                            <Text style={S.informationTextSecondary}>Limite disponível</Text>
+                                            <Text style={S.informationValueLimit}>R$ 1.543,96</Text>
+                                        </View>
                                     </View>
                                     <View style={S.barStatus}>
                                         <View style={{...S.barStatusNext, flexGrow: 3}}></View>

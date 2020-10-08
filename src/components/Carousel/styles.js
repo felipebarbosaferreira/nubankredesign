@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import * as Colors from '../../styles/colors';
+import * as Typography from '../../styles/typography';
 
 const styles = StyleSheet.create({
     carousel: {
@@ -63,6 +64,43 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.lightGreen,
         borderBottomLeftRadius: 5,
         borderBottomRightRadius: 5,
+    },
+
+    labelArea: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+     
+    labelText: {
+        marginLeft: 10,
+        color: Colors.textLightGray,
+    },
+     
+    informationArea: {
+        flexGrow: 2,
+        justifyContent: 'center',
+    },
+     
+    informationLabel: {
+        fontSize: 18,
+        color: Colors.lightBlue,
+    },
+     
+    informationTextPrimary: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: Colors.lightBlue,
+    },
+     
+    informationTextSecondary: {
+        ...Typography.textLabel,
+        color: Colors.textLightGray,
+    },
+
+    informationValueLimit: {
+        ...Typography.textImportant,
+        fontWeight: 'bold',
+        color: Colors.lightGreen,
     },
 })
 

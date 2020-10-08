@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     },
 
     textUserName: {
-        color: Colors.baseText,
+        color: Colors.textWhite,
         fontSize: 20,
         fontWeight: 'bold',
     },
