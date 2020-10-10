@@ -38,7 +38,7 @@ export default function Home({ navigation }) {
         },
     }
     const dataNuAccountState = {
-        nuAccountAmount: 339.4,
+        nuAccountAmount: 821.3,
         dataChart: {
             labels: [
                 'Mai',
@@ -58,9 +58,7 @@ export default function Home({ navigation }) {
             ]
         },
     }
-    const dataRewards = {
-
-    }
+    const dataRewards = {}
 
     const cards = [
         CardStateSpending(dataStateSpending),

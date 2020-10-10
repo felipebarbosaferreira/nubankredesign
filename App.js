@@ -7,8 +7,8 @@ import Home from './src/views/Home';
 
 const Routes = createAppContainer(
   createSwitchNavigator({
-    Home,
     Splash,
+    Home,
   })
 );
 

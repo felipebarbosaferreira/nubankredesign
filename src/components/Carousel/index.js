@@ -53,7 +53,7 @@ const Carousel = ({ items = [], itemsPerInterval = 1, typeItem = '', }) => {
 
     useEffect(() => {
         init(width)
-        setInterval(1)
+        // setInterval(1)
         // TODO render again ScrollView or set position to first item
     }, [items])
 
