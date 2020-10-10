@@ -40,6 +40,7 @@ import {
     faEye,
     faEyeSlash,
     faCircle,
+    faGift,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const iconDefault = 1
@@ -68,6 +69,7 @@ export const iconMoneySavings = 23
 export const iconEye = 24
 export const iconEyeSlash = 25
 export const iconCircle = 26
+export const iconGift = 27
 
 const mapIcons = new Map();
 mapIcons.set(iconDefault, faStickyNote);
@@ -97,6 +99,7 @@ mapIcons.set(iconMoneySavings, faPiggyBank);
 mapIcons.set(iconEye, faEye);
 mapIcons.set(iconEyeSlash, faEyeSlash);
 mapIcons.set(iconCircle, faCircle);
+mapIcons.set(iconGift, faGift);
 
 const getIconByKey = (key) => {
     return mapIcons.get(key)

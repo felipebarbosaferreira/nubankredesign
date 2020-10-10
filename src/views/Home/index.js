@@ -9,11 +9,11 @@ import Carousel from '../../components/Carousel';
 
 import CardStateSpending from '../../components/CardStateSpending';
 import CardNuAccountState from '../../components/CardNuAccountState';
+import CardRewards from '../../components/CardRewards';
 
 
 export default function Home({ navigation }) {
     // TODO logic get data
-
     const dataStateSpending = {
         invoiceAmount: 339.4,
         availableLimitValue: 1534,
@@ -25,7 +25,7 @@ export default function Home({ navigation }) {
     }
     const dataNuAccountState = {
         nuAccountAmount: 339.4,
-        dataGraph: {
+        dataChart: {
             labels: [
                 'Mai',
                 'Jun',
@@ -44,11 +44,14 @@ export default function Home({ navigation }) {
             ]
         },
     }
+    const dataRewards = {
+
+    }
 
     const cards = [
         CardStateSpending(dataStateSpending),
         CardNuAccountState(dataNuAccountState),
-        CardStateSpending(dataStateSpending),
+        CardRewards(dataRewards),
     ]
 
     return (

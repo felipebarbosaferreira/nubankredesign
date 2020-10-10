@@ -1,3 +1,5 @@
+const fontWeightMedium = '800';
+
 export const pageTitles = {
     fontSize: 20,
 }
@@ -8,7 +10,7 @@ export const paragraphText = {
 
 export const listTitles = {
     fontSize: 14,
-    fontWeight: 'medium',
+    fontWeight: fontWeightMedium,
 }
 
 export const listItem = {
@@ -17,7 +19,7 @@ export const listItem = {
 
 export const button = {
     fontSize: 14,
-    fontWeight: 'medium',
+    fontWeight: fontWeightMedium,
 }
 
 export const textInputs = {

@@ -11,7 +11,7 @@ import { getIconByKey, iconMoneySavings, iconEye, iconEyeSlash } from '../../uti
 import { getValueFormatted, getValueFormattedHideNumbers, } from '../../utils/formatCurrency';
 
 // TODO think make component lineChart
-const getChartNuAccountMovement = (dataGraph) => {
+const getChartNuAccountMovement = (dataChart) => {
     return (
         <LineChart
             bezier
@@ -23,13 +23,13 @@ const getChartNuAccountMovement = (dataGraph) => {
             withShadow={false}
             fromZero={true}
             data={{
-                labels: dataGraph.labels,
+                labels: dataChart.labels,
                 datasets: [{
-                    data: dataGraph.data
+                    data: dataChart.data
                 }]
             }}
             width={Dimensions.get('window').width - 60} // Dimensions from react-native
-            height={165}
+            height={170}
             chartConfig={{
                 decimalPlaces: 0, // optional, defaults to 2dp
                 backgroundColor: white,
@@ -47,10 +47,12 @@ const getChartNuAccountMovement = (dataGraph) => {
 }
 
 
-const CardNuAccountState = ({ nuAccountAmount = 0, dataGraph = 0, }) => {
+const CardNuAccountState = ({ nuAccountAmount = 0, dataChart = 0, }) => {
 
     const [showValue, setShowValue] = useState(true);
     const [accountAmount, setAccountAmount] = useState(getValueFormatted(nuAccountAmount));
+
+    const chart = getChartNuAccountMovement(dataChart);
 
     useEffect(() => {
         if (showValue) {
@@ -77,7 +79,7 @@ const CardNuAccountState = ({ nuAccountAmount = 0, dataGraph = 0, }) => {
                 </View>
 
                 <View style={S.chartArea}>
-                    {getChartNuAccountMovement(dataGraph)}
+                    {chart}
                 </View>
             </View>
         </View>
