@@ -41,7 +41,14 @@ import {
     faEyeSlash,
     faCircle,
     faGift,
+    faCoins,
+    faDonate,
+    faGamepad,
+    faKissWinkHeart,
 } from '@fortawesome/free-solid-svg-icons';
+
+import * as Regular from '@fortawesome/free-regular-svg-icons';
+
 
 export const iconDefault = 1
 export const iconFood = 2
@@ -70,6 +77,11 @@ export const iconEye = 24
 export const iconEyeSlash = 25
 export const iconCircle = 26
 export const iconGift = 27
+export const iconCoins = 28
+export const iconDonate = 28
+export const iconGamepad = 29
+export const iconKissWinkHeart = 30
+
 
 const mapIcons = new Map();
 mapIcons.set(iconDefault, faStickyNote);
@@ -100,6 +112,21 @@ mapIcons.set(iconEye, faEye);
 mapIcons.set(iconEyeSlash, faEyeSlash);
 mapIcons.set(iconCircle, faCircle);
 mapIcons.set(iconGift, faGift);
+mapIcons.set(iconCoins, faCoins);
+mapIcons.set(iconDonate, faDonate);
+mapIcons.set(iconGamepad, faGamepad);
+mapIcons.set(iconKissWinkHeart, faKissWinkHeart);
+
+/**
+ * Regular icons
+ */
+export const iconRegularChat = 101
+export const iconRegularCreditCard = 102
+export const iconRegularMoneySavings = 103
+export const iconRegularGift = 104
+
+mapIcons.set(iconRegularChat, Regular.faComment);
+mapIcons.set(iconRegularCreditCard, Regular.faCreditCard);
 
 const getIconByKey = (key) => {
     return mapIcons.get(key)

@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import * as Colors from '../../styles/colors';
+import * as Typography from '../../styles/typography';
 
 
 const buttonCard = {
@@ -7,6 +8,8 @@ const buttonCard = {
     height: 90,
     marginRight: 15,
     borderRadius: 8,
+    padding: 8,
+    justifyContent: 'space-between',
     backgroundColor: Colors.cardPurple,
 }
 
@@ -60,47 +63,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 
+    textButtonList: {
+        color: Colors.textWhite,
+        ...Typography.button,
+    },
+
     nuSymbol: {
         height: 60,
         width: 60,
         marginRight: 10,
-    },
-
-
-    carousel: {
-    },
-
-    scrollView: {
-    },
-
-    cardDark: {
-        backgroundColor: Colors.darkPurple,
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-
-    cardLight: {
-        backgroundColor: Colors.white,
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-
-    bulletsArea: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 10,
-        backgroundColor: Colors.background,
-    },
-
-    bullet: {
-        height: 10,
-        width: 10,
-        marginHorizontal: 5,
-        backgroundColor: Colors.white,
-        borderRadius: 20,
     },
 })
 
