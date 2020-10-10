@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text, ScrollView, Image } from 'react-native';
 
 import nuSymbol from '../../assets/nu_symbol_offwhite.png';
@@ -7,24 +7,29 @@ import S from './styles';
 
 import Carousel from '../../components/Carousel';
 
+import CardStateSpending from '../../components/CardStateSpending';
+
 
 
 export default function Home({ navigation }) {
-    // TODO logic
-    const data = [
-        {
-            label: "Limite",
-            value: "Av",
+    // TODO logic get data
+
+    const dataStateSpending = { 
+        invoiceAmount: 339.4, 
+        availableLimitValue: 1534, 
+        barStatus: {
+            next: 2,
+            current: 4,
+            available: 4,
         },
-        {
-            label: "Fatura",
-            value: "Bv",
-        },
-        {
-            label: "Promo",
-            value: "Cv",
-        },
+    }
+
+    const cards = [
+        CardStateSpending(dataStateSpending),
+        CardStateSpending(dataStateSpending),
+        CardStateSpending(dataStateSpending),
     ]
+    
     return (
         <View style={S.container}>
             <View style={S.hearder}>
@@ -32,7 +37,7 @@ export default function Home({ navigation }) {
                 <Text style={S.textUserName}>Felipe</Text>
             </View>
             <View style={S.content}>
-                <Carousel items={data}/>
+                <Carousel items={cards}/>
             </View>
             <ScrollView 
                 style={S.buttonsList} 

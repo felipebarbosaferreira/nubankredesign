@@ -1,11 +1,7 @@
-import React, { useState, } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'; 
 
 import S from './styles';
-
-import { getIconByKey, iconCreditCard } from '../../utils/typeIcons';
-
 
 /**
  * Carousel base https://medium.com/@rossbulat/react-native-carousels-with-horizontal-scroll-views-60b0587a670c
@@ -39,7 +35,7 @@ const getBullets = (totalIntervals, interval) => {
     return bullets;
 }
 
-const Carousel = ({ items = [], itemsPerInterval = 1, style = {}, }) => {
+const Carousel = ({ items = [], itemsPerInterval = 1, typeItem = '', }) => {
 
     const [intervals, setIntervals] = useState(1);
     const [interval, setInterval] = useState(1);
@@ -54,6 +50,12 @@ const Carousel = ({ items = [], itemsPerInterval = 1, style = {}, }) => {
     }
 
     const bullets = getBullets(intervals, interval);
+
+    useEffect(() => {
+        init(width)
+        setInterval(1)
+        // TODO render again ScrollView or set position to first item
+    }, [items])
 
     return (
         <View style={S.carousel}>
@@ -71,36 +73,26 @@ const Carousel = ({ items = [], itemsPerInterval = 1, style = {}, }) => {
             >
                 {
                     items.map((item, index) => {
-                        return (
-                            // <View style={S.card} key={index}>
-                            //     <Text style={S.text}>{item.label}</Text>
-                            // </View>
-                            <View style={S.card} key={index} >
-                                <View style={S.container}>
-                                    <View style={S.content}>
-                                        <View style={S.labelArea}>
-                                            <FontAwesomeIcon icon={ getIconByKey(22) } size={24} color='#B5B5B5' />
-                                            <Text style={S.labelText}>Cartão de Crédito</Text>
-                                        </View>
-
-                                        <View style={S.informationArea}>
-                                            <Text style={S.informationLabel}>Fatura atual</Text>
-                                            <Text style={S.informationTextPrimary}>R$ 339,04</Text>
-                                        </View>
-
-                                        <View>
-                                            <Text style={S.informationTextSecondary}>Limite disponível</Text>
-                                            <Text style={S.informationValueLimit}>R$ 1.543,96</Text>
-                                        </View>
+                        switch (typeItem) {
+                            case '//TODO other':
+                                return (
+                                    <View
+                                        key={index}
+                                        index={index}
+                                        label={item.label}
+                                        value={item.value}
+                                    >
+                                        {index} {item.label} {item.value}
                                     </View>
-                                    <View style={S.barStatus}>
-                                        <View style={{...S.barStatusNext, flexGrow: 3}}></View>
-                                        <View style={{...S.barStatusCurrent, flexGrow: 2}}></View>
-                                        <View style={{...S.barStatusAvailable, flexGrow: 5}}></View>
+                                );
+
+                            default:
+                                return (
+                                    <View style={S.card} key={index}>
+                                        {item}
                                     </View>
-                                </View>
-                            </View>
-                        );
+                                )
+                        }
                     })
                 }
             </ScrollView>
