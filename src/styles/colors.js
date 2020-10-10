@@ -5,7 +5,8 @@ export const orange = '#fe992f'
 /**
  * Dark
  */
-export const darkestGray = '#29292c'
+export const almostBlack = '#242424'
+export const darkestGray = '#191919'
 export const darkGray = '#3d3e44'
 export const darkPurple = '#282b36'
 /**
@@ -24,9 +25,10 @@ export const lightGreen = '#9dd148'
 export const transparent = 'rgba(0, 0, 0, 0)'
 
 export const textWhite = white
+export const text = almostBlack
+export const textDark = darkestGray
 export const iconLightGray = lightGray
 export const textLightGray = lightGray
-export const darkText = darkestGray
 export const sectionBackground = lightWarmGray
 export const background = purple
 export const cardPurple = lightPurple

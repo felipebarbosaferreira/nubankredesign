@@ -9,7 +9,7 @@ import { getIconByKey, iconCreditCard, } from '../../utils/typeIcons';
 import { getValueFormatted, } from '../../utils/formatCurrency';
 
 
-const CardStateSpending = ({ invoiceAmount = 0, availableLimitValue = 0, barStatus = {}, styleCard = {} }) => {
+const CardStateSpending = ({ invoiceAmount = 0, availableLimitValue = 0, barStatus = {}, }) => {
     const { next, current, available } = barStatus;
 
     return (
