@@ -68,6 +68,8 @@ export default function Home({ navigation }) {
 
     const getIcon = iconKey => <FontAwesomeIcon icon={getIconByKey(iconKey)} size={24} color={white} />;
 
+    const navigationToChat = () => navigation.navigate('Assistant');
+
     return (
         <View style={S.container}>
             <View style={S.hearder}>
@@ -83,7 +85,7 @@ export default function Home({ navigation }) {
                 style={S.buttonsList}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false} >
-                <TouchableOpacity style={S.buttonCardFirst}>
+                <TouchableOpacity style={S.buttonCardFirst} onPress={() => navigationToChat()}>
                     {getIcon(iconRegularChat)}
                     <Text style={S.textButtonList}>Chat</Text>
                 </TouchableOpacity>

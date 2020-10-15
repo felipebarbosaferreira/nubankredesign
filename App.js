@@ -4,9 +4,11 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
 import Splash from './src/views/Splash';
 import Home from './src/views/Home';
+import Assistant from './src/views/Assistant';
 
 const Routes = createAppContainer(
   createSwitchNavigator({
+    Assistant,
     Splash,
     Home,
   })

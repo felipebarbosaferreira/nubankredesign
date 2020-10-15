@@ -122,11 +122,11 @@ mapIcons.set(iconKissWinkHeart, faKissWinkHeart);
  */
 export const iconRegularChat = 101
 export const iconRegularCreditCard = 102
-export const iconRegularMoneySavings = 103
-export const iconRegularGift = 104
+export const iconRegularKeyboard = 103
 
 mapIcons.set(iconRegularChat, Regular.faComment);
 mapIcons.set(iconRegularCreditCard, Regular.faCreditCard);
+mapIcons.set(iconRegularKeyboard, Regular.faKeyboard);
 
 const getIconByKey = (key) => {
     return mapIcons.get(key)
