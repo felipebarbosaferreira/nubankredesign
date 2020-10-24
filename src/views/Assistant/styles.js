@@ -53,25 +53,34 @@ const styles = StyleSheet.create({
     },
 
     actionArea: {
-        flex: 1,
-        flexGrow: 1,
-        justifyContent: 'flex-end',
-        backgroundColor: Colors.lightGreen,
-    },
-
-    buttonKeyboard: {
-        margin: 15, // TODO create const to margin borderView
+        bottom: 0,
+        minHeight: 150,
     },
 
     buttonMicArea: {
         flex: 1,
-        alignSelf:'center',
-        justifyContent: 'flex-end',
-        marginBottom: -39,
-        marginTop: 15,
+        minWidth: 150,
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 
-    buttonMic: {
+    animationRipple: {
+        width: 150,
+        height: 150,
+        marginBottom: -115,
+        backgroundColor: Colors.purple,
+    },
+
+    animationMic: {
+        width: 80,
+        height: 80,
+    },
+
+    buttonKeyboard: {
+        position: 'absolute',
+        bottom: 15,
+        left: 15,
     },
 })
 
