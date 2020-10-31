@@ -46,12 +46,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 0,
     },
 
-    messagesArea: {
-        flex: 1,
-        marginHorizontal: 15,
-        backgroundColor: Colors.darkGray,
-    },
-
     actionArea: {
         bottom: 0,
         minHeight: 150,

@@ -13,6 +13,7 @@ export const darkPurple = '#282b36'
  * Medium
  */
 export const mediumGray = '#9b9aa1'
+export const mediumPurple = '#782F8C'
 /**
  * Light
  */

@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, Image, TouchableOpacity, } from 'react-native';
 
 import nuSymbol from '../../assets/nu_symbol_offwhite.png';
 
@@ -15,56 +15,75 @@ import {
 
 import LottieView from 'lottie-react-native';
 
+import ChatShowMessages from '../../components/ChatShowMessages';
 
+export default function Assistant({ navigation }) {
 
-export default class Assistant extends React.Component {
-    componentDidMount() {
-        this.animationRipple.play();
-        // this.animationMic.play();
-        // Or set a specific startFrame and endFrame with:
-        // this.animation.play(30, 120);
-    }
+    const [loadOnProgress, setLoadOnProgress] = useState(false);
+    const [messages, setMessages] = useState([]);
+    const [welcomeMessage, setWelcomeMessage] = useState();
 
-    _getIcon({ iconKey }) {
+    const animationMic = useRef(null);
+    const animationRipple = useRef(null);
+
+    const getIcon = ({ iconKey }) => {
         return (
             <FontAwesomeIcon icon={getIconByKey(iconKey)} size={24} color={white} />
         );
     };
+    
+    const setMicVisible = () => {
+        animationMic.current.play(193, 194);
+        animationMic.current.reset();
+    }
 
-    _setAnimDataReceived() {
-        this.animationMic.play(181, 192); // return mic effect
-        setTimeout(() => { 
-            this.animationMic.play(193, 194);
-            this.animationMic.reset();
+    const setAnimDataReceived = () => {
+        animationMic.current.play(181, 192); // return mic effect
+        setTimeout(() => {
+            setMicVisible()
 
-            this.animationRipple.play();
+            setMessages(
+                [
+                    ...messages,
+                    {
+                        texts: [
+                            "Quero transferir dindin, consegue me da um help com isso?",
+                        ],
+                        fromUser: true,
+                    },
+                    {
+                        texts: [
+                            "Qual o valor?",
+                        ],
+                    },
+                ],
+            );
+
+            isLoadingDataFinished();
         }, 450);
     }
 
-    _setAnimDataLoad() {
-        this.animationMic.play(160, 172); // enter load effect
-        setTimeout(() => { this.animationMic.play(172, 180) }, 450); // load spinning effect
+    const setAnimDataLoad = () => {
+        animationMic.current.play(160, 172); // enter load effect
+        setTimeout(() => { animationMic.current.play(172, 180) }, 450); // load spinning effect
 
-        setTimeout(() => { this._setAnimDataReceived() }, 5000)
+        setTimeout(() => { setAnimDataReceived() }, 5000)
     }
 
-    _setAnimRecognizingVoice() {
-        this.animationRipple.reset(); // stop ripple
+    const setAnimRecognizingVoice = () => {
+        isLoadingData();
 
-        this.animationMic.play(115, 127); // hide mic effect
-        setTimeout(() => { this.animationMic.play(38, 72) }, 450); // recognizing effect
+        animationMic.current.play(115, 127); // hide mic effect
+        setTimeout(() => { animationMic.current.play(38, 72) }, 450); // recognizing effect
 
-        setTimeout(() => { this._setAnimDataLoad() }, 5000);
+        setTimeout(() => { setAnimDataLoad() }, 5000);
     }
 
-
-    _getRippleAnim() {
+    const getRippleAnim = () => {
         return (
             <TouchableOpacity style={S.buttonMic}>
                 <LottieView
-                    ref={animationRipple => {
-                        this.animationRipple = animationRipple;
-                    }}
+                    ref={animationRipple}
                     style={S.animationRipple}
                     source={require('../../assets/anim/ripple.json')}
                 />
@@ -72,53 +91,81 @@ export default class Assistant extends React.Component {
         );
     };
 
-    _getMicAnim() {
+    const getMicAnim = () => {
         // Animation by Hicy Wonder https://lottiefiles.com/643-aispeech-mic
         return (
-            <TouchableOpacity style={S.buttonMic} onPress={() => this._setAnimRecognizingVoice()}>
+            <TouchableOpacity style={S.buttonMic} onPress={() => setAnimRecognizingVoice()}>
                 <LottieView
-                    ref={animationMic => {
-                        this.animationMic = animationMic;
-                    }}
+                    ref={animationMic}
                     style={S.animationMic}
                     source={require('../../assets/anim/mic.json')}
+                    speed={0.6}
                 />
             </TouchableOpacity>
         );
     };
 
-
-
-    render() {
-        return (
-            <View style={S.container}>
-                <View style={S.hearder}>
-                    <Image style={S.nuSymbol} source={nuSymbol} />
-                    <Text style={S.textUserName}>Felipe</Text>
-                </View>
-
-                <View style={S.content}>
-                    <ScrollView style={S.messagesArea}>
-                        <Text>
-                            Bom dia!
-                    </Text>
-                        <Text>
-                            Como posso te ajudar?
-                    </Text>
-                    </ScrollView>
-                </View>
-
-                <View style={S.actionArea}>
-                    <View style={S.buttonMicArea}>
-                        {this._getRippleAnim()}
-                        {this._getMicAnim()}
-                    </View>
-                </View>
-
-                <TouchableOpacity style={S.buttonKeyboard}>
-                    {this._getIcon({ iconKey: iconRegularKeyboard })}
-                </TouchableOpacity>
-            </View>
-        )
+    async function sendMessage(message) {
+        // TODO call api
+        // TODO reproduce audio
+        // TODO return texts api
+        return {
+            texts: [
+                "Oi!",
+                "Em que posso te ajudar?"
+            ],
+        }
     }
+
+    async function getWelcomeMessage() {
+        setMicVisible()
+        isLoadingData()
+        const welcomeMsg = await sendMessage("oi");
+        setWelcomeMessage(true)
+        setMessages([...messages, {
+            firstMessage: true,
+            ...welcomeMsg,
+        }])
+        isLoadingDataFinished()
+    }
+
+    function isLoadingData() {
+        animationRipple.current.reset() // stop ripple
+        setLoadOnProgress(true);
+    }
+
+    function isLoadingDataFinished() {
+        animationRipple.current.play() // play ripple
+        setLoadOnProgress(false);
+    }
+
+    useEffect(() => {
+
+        !welcomeMessage && getWelcomeMessage()
+
+    }, [loadOnProgress])
+
+    return (
+        <View style={S.container}>
+            <View style={S.hearder}>
+                <Image style={S.nuSymbol} source={nuSymbol} />
+                <Text style={S.textUserName}>Felipe</Text>
+            </View>
+
+            <View style={S.content}>
+                <ChatShowMessages messages={messages} />
+            </View>
+
+            <View style={S.actionArea}>
+                <View style={S.buttonMicArea}>
+                    {getRippleAnim()}
+                    {getMicAnim()}
+                </View>
+            </View>
+
+            <TouchableOpacity style={S.buttonKeyboard}>
+                {getIcon({ iconKey: iconRegularKeyboard })}
+            </TouchableOpacity>
+        </View>
+    )
 }
