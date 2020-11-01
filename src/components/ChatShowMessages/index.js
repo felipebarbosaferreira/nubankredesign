@@ -1,5 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, } from 'react';
 import { View, Text, ScrollView, } from 'react-native';
+
+import LottieView from 'lottie-react-native';
 
 import S from './styles';
 
@@ -14,15 +16,12 @@ import {
 
 import { getValueFormatted, } from '../../utils/formatCurrency';
 
-const getIcon = ({ iconKey }) => {
-    return (
-        <FontAwesomeIcon icon={getIconByKey(iconKey)} size={24} color={iconGray} />
-    );
-};
-
 const CARD_TRANSFER_MONEY = 'cardRealizarTransferencia';
 
-const ChatShowMessages = ({ messages = [], }) => {
+const ChatShowMessages = ({ messages = [], showLoadingDotsUser = false, showLoadingDotsBot = false, }) => {
+    const animationDotsLoadingBot = useRef(null);
+    const animationDotsLoadingUser = useRef(null);
+
     const [scrollViewRef, setScrollViewRef] = useState(null);
 
     const isLastMessage = (length, index) => {
@@ -31,6 +30,35 @@ const ChatShowMessages = ({ messages = [], }) => {
         }
         return { opacity: 1 }
     }
+
+    const getIcon = ({ iconKey }) => {
+        return (
+            <FontAwesomeIcon icon={getIconByKey(iconKey)} size={24} color={iconGray} />
+        );
+    };
+
+    const getDotsLoadingBot = () => {
+        // Animation by Daniel Tremontini Santiago https://lottiefiles.com/593-dot-preloader
+        return (
+            <LottieView
+                    ref={animationDotsLoadingBot}
+                    style={S.animationDots}
+                    source={require('../../assets/anim/dots.json')}
+                    autoPlay={true}
+                />
+        );
+    };
+
+    const getDotsLoadingUser = () => {
+        return (
+            <LottieView
+                    ref={animationDotsLoadingUser}
+                    style={S.animationDotsUser}
+                    source={require('../../assets/anim/dots.json')}
+                    autoPlay={true}
+                />
+        );
+    };
 
     const getCardTrasnferMoney = (it, index) => {
         const messageConfirmation = 'Tudo certo?'; // TODO get from response API
@@ -98,6 +126,7 @@ const ChatShowMessages = ({ messages = [], }) => {
         )
     }
 
+
     return (
         <ScrollView
             ref={(ref) => setScrollViewRef(ref)}
@@ -121,6 +150,20 @@ const ChatShowMessages = ({ messages = [], }) => {
             {
                 messages.length > 1 &&
                 messages.map((it, index) => renderItem(it, index))
+            }
+
+            {
+                showLoadingDotsUser &&
+                <View key="dotsUser" style={S.messageUser}>
+                    {getDotsLoadingUser()}
+                </View>
+            }
+
+            {
+                showLoadingDotsBot &&
+                <View key="dots" style={S.messageBot}>
+                    {getDotsLoadingBot()}
+                </View>
             }
         </ScrollView>
     )

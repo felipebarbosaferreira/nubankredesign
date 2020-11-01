@@ -27,6 +27,7 @@ export const lightGreen = '#9dd148'
  * Icons
  */
 export const iconGray = '#9F9F9F'
+export const iconDotsLoading = lightPurple
 
 export const transparent = 'rgba(0, 0, 0, 0)'
 

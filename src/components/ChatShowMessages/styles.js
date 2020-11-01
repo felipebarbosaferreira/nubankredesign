@@ -2,6 +2,11 @@ import { StyleSheet } from 'react-native';
 import * as Colors from '../../styles/colors';
 import * as Typography from '../../styles/typography';
 
+const DOTS_SIZE = {
+    width: 30,
+    height: 30,
+}
+
 const styles = StyleSheet.create({
     messagesArea: {
         flex: 1,
@@ -76,6 +81,18 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: Colors.mediumBlue,
         marginHorizontal: 15,
+    },
+
+
+
+    animationDots: {
+        ...DOTS_SIZE,
+        backgroundColor: Colors.purple,
+    },
+
+    animationDotsUser: {
+        ...DOTS_SIZE,
+        backgroundColor: Colors.mediumPurple,
     },
 })
 

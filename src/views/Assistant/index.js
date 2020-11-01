@@ -22,6 +22,8 @@ export default function Assistant({ navigation }) {
     const [loadOnProgress, setLoadOnProgress] = useState(false);
     const [messages, setMessages] = useState([]);
     const [welcomeMessage, setWelcomeMessage] = useState();
+    const [loadOnProgressMessageUser, setLoadOnProgressMessageUser] = useState(false);
+    const [loadOnProgressMessageBot, setLoadOnProgressMessageBot] = useState(false);
 
     const animationMic = useRef(null);
     const animationRipple = useRef(null);
@@ -33,24 +35,40 @@ export default function Assistant({ navigation }) {
     };
     
     const setMicVisible = () => {
+        animationMic.current.play(181, 192); // return mic effect
         animationMic.current.play(193, 194);
         animationMic.current.reset();
     }
 
-    const setAnimDataReceived = () => {
-        animationMic.current.play(181, 192); // return mic effect
-        setTimeout(() => {
-            setMicVisible()
+    const getMessages = () => {
+        console.log(messages)
+        return messages
+    }
 
+    const setAnimDataReceived = () => {
+        // animationMic.current.play(181, 192); // return mic effect
+        setTimeout(() => {
             setMessages(
                 [
-                    ...messages,
+                    ...getMessages(),
                     {
                         texts: [
                             "Quero transferir dindin, consegue me da um help com isso?",
                         ],
                         fromUser: true,
                     },
+                ]
+            )
+            setLoadOnProgressMessageUser(false)
+        }, 450);
+    }
+
+    const finishMock = () => {
+        setLoadOnProgressMessageBot(true)
+        setTimeout(() => { 
+            setMessages(
+                [
+                    ...getMessages(),
                     {
                         texts: [
                             "Qual o valor?",
@@ -100,15 +118,20 @@ export default function Assistant({ navigation }) {
                            },
                        },
                     },
-                ],
-            );
+                ]
+            )
 
-            isLoadingDataFinished();
-        }, 450);
+        setLoadOnProgressMessageBot(false)
+        setMicVisible()
+        isLoadingDataFinished();
+        }, 2000)
     }
 
     const setAnimDataLoad = () => {
         animationMic.current.play(160, 172); // enter load effect
+
+        setLoadOnProgressMessageUser(true);
+
         setTimeout(() => { animationMic.current.play(172, 180) }, 450); // load spinning effect
 
         setTimeout(() => { setAnimDataReceived() }, 5000)
@@ -187,7 +210,9 @@ export default function Assistant({ navigation }) {
 
         !welcomeMessage && getWelcomeMessage()
 
-    }, [loadOnProgress])
+        messages.length === 2 && finishMock()
+
+    }, [loadOnProgress, messages])
 
     return (
         <View style={S.container}>
@@ -197,7 +222,11 @@ export default function Assistant({ navigation }) {
             </View>
 
             <View style={S.content}>
-                <ChatShowMessages messages={messages} />
+                <ChatShowMessages 
+                    messages={messages} 
+                    showLoadingDotsUser={loadOnProgressMessageUser} 
+                    showLoadingDotsBot={loadOnProgressMessageBot} 
+                />
             </View>
 
             <View style={S.actionArea}>
