@@ -56,6 +56,50 @@ export default function Assistant({ navigation }) {
                             "Qual o valor?",
                         ],
                     },
+                    {
+                        texts: [
+                            "R$ 200",
+                        ],
+                    },
+                    {
+                        texts: [
+                            "appAction",
+                        ],
+                        isAppAction: true,
+                        appAction: {
+                            action: "transferencia.realizar",
+                            showToUser: "cardRealizarTransferencia",
+                            fields: {
+                                person: {
+                                    structValue: {
+                                        fields: {
+                                            name: {
+                                                stringValue: "maira",
+                                                kind: "stringValue"
+                                           }
+                                       }
+                                   },
+                                    kind: "structValue"
+                               },
+                                currencyName: {
+                                    stringValue: "BRL",
+                                    kind: "stringValue"
+                               },
+                                transferir: {
+                                    stringValue: "transferir",
+                                    kind: "stringValue"
+                               },
+                                valor: {
+                                    numberValue: 100,
+                                    kind: "numberValue"
+                               },
+                                showToUser: {
+                                    stringValue: "cardRealizarTransferencia",
+                                    kind: "stringValue",
+                               },
+                           },
+                       },
+                    },
                 ],
             );
 

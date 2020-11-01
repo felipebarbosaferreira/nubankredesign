@@ -36,6 +36,47 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: Colors.white,
     },
+
+
+    cardTrasnferMoney: {
+        backgroundColor: Colors.white,
+        paddingHorizontal: 15,
+        paddingTop: 15,
+        marginVertical: 10,
+        borderRadius: 10,
+    },
+
+    cardTrasnferMoneyLine: {
+        flexDirection: 'row',
+        marginBottom: 15,
+        alignItems: 'center',
+    },
+
+    cardTrasnferMoneyContact: {
+        marginHorizontal: 15,
+    },
+
+    cardTrasnferMoneyContactName: {
+        ...Typography.cardTextImportant,
+        color: Colors.mediumGray,
+    },
+
+    cardTrasnferMoneyContactAreaInfo: {
+        marginTop: -15,
+        marginHorizontal: 39,
+    },
+
+    cardTrasnferMoneyContactInfo: {
+        ...Typography.paragraphText,
+        color: Colors.mediumGray,
+    },
+
+    cardTrasnferMoneyAmount: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: Colors.mediumBlue,
+        marginHorizontal: 15,
+    },
 })
 
 export default styles;

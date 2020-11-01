@@ -1,4 +1,5 @@
 const fontWeightMedium = '800';
+const fontWeightBold = 'bold';
 
 export const pageTitles = {
     fontSize: 20,
@@ -32,4 +33,9 @@ export const textImportant = {
 
 export const textLabel = {
     fontSize: 16,
+}
+
+export const cardTextImportant = {
+    fontSize: 20,
+    fontWeight: fontWeightBold,
 }
