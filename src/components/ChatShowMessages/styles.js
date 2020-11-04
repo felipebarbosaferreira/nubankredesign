@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
 
     messageFirst: {
         marginTop: 100,
-        alignSelf: 'center',
     },
     
     messageBot: {

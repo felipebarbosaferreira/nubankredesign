@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, } from 'react';
+import React, { useState, useRef, } from 'react';
 import { View, Text, ScrollView, } from 'react-native';
 
 import LottieView from 'lottie-react-native';
@@ -41,31 +41,31 @@ const ChatShowMessages = ({ messages = [], showLoadingDotsUser = false, showLoad
         // Animation by Daniel Tremontini Santiago https://lottiefiles.com/593-dot-preloader
         return (
             <LottieView
-                    ref={animationDotsLoadingBot}
-                    style={S.animationDots}
-                    source={require('../../assets/anim/dots.json')}
-                    autoPlay={true}
-                />
+                ref={animationDotsLoadingBot}
+                style={S.animationDots}
+                source={require('../../assets/anim/dots.json')}
+                autoPlay={true}
+            />
         );
     };
 
     const getDotsLoadingUser = () => {
         return (
             <LottieView
-                    ref={animationDotsLoadingUser}
-                    style={S.animationDotsUser}
-                    source={require('../../assets/anim/dots.json')}
-                    autoPlay={true}
-                />
+                ref={animationDotsLoadingUser}
+                style={S.animationDotsUser}
+                source={require('../../assets/anim/dots.json')}
+                autoPlay={true}
+            />
         );
     };
 
-    const getCardTrasnferMoney = (it, index) => {
+    const getCardTrasnferMoney = (item, index) => {
         const messageConfirmation = 'Tudo certo?'; // TODO get from response API
         const contact = 'Maria Silva';
         const numberAg = '0001';
         const numberCt = '123654-7';
-        const amountMoney = 200; 
+        const amountMoney = 200;
 
         return (
             <View key={`${index}`}>
@@ -92,31 +92,32 @@ const ChatShowMessages = ({ messages = [], showLoadingDotsUser = false, showLoad
         )
     }
 
-    const renderItem = (it, index) => {
+    const renderItemFirstPosition = (item) => {
+        return (
+            <View key="welcome" style={S.messageFirst}>
+                {
+                    item.texts.map((text, index) => (
+                        <Text key={`text${index}`} style={(index === (item.texts.length - 1)) ? S.messageTextImportant : S.messageText}>
+                            {text}
+                        </Text>
+                    ))
+                }
+            </View>
+        )
+    }
 
-        if (it.isAppAction) {
-            let toShow;
+    const renderItemOtherPositions = (item, index) => {
+        const styleMessageFrom = item.fromUser ? S.messageUser : S.messageBot;
 
-            switch (it.appAction.showToUser) {
-                case CARD_TRANSFER_MONEY:
-                    toShow = getCardTrasnferMoney(it, index)
-                    
-                default:
-                    console.log("nothing to show")
-                    break;
-            }
-
-            return toShow
+        const styleItem = {
+            ...styleMessageFrom,
+            ...isLastMessage(messages.length, index),
         }
 
         return (
-            <View key={`${index}`} style={
-                it.fromUser
-                    ? { ...S.messageUser, ...isLastMessage(messages.length, index) }
-                    : { ...S.messageBot, ...isLastMessage(messages.length, index) }
-            }>
+            <View key={`${index}`} style={styleItem}>
                 {
-                    it.texts.map((text, index) => (
+                    item.texts.map((text, index) => (
                         <Text key={`text${index}`} style={S.messageText}>
                             {text}
                         </Text>
@@ -124,6 +125,30 @@ const ChatShowMessages = ({ messages = [], showLoadingDotsUser = false, showLoad
                 }
             </View>
         )
+    }
+
+    const renderItem = (item, index) => {
+
+        if (item.isAppAction) {
+            let toShow;
+
+            switch (item.appAction.showToUser) {
+                case CARD_TRANSFER_MONEY:
+                    toShow = getCardTrasnferMoney(item, index)
+
+                default:
+                    // console.log("nothing to show")
+                    break;
+            }
+
+            return toShow
+        }
+
+        if (index === 0) {
+            return renderItemFirstPosition(item)
+        }
+
+        return renderItemOtherPositions(item, index);
     }
 
 
@@ -134,22 +159,8 @@ const ChatShowMessages = ({ messages = [], showLoadingDotsUser = false, showLoad
             onContentSizeChange={() => scrollViewRef.scrollToEnd({ animated: true })}
         >
             {
-                messages.length === 1 &&
-                <View key="welcome" style={S.messageFirst}>
-                    {
-                        messages.map(it => (
-                            it.texts.map((text, index) => (
-                                <Text key={`text${index}`} style={(index === (it.texts.length - 1)) ? S.messageTextImportant : S.messageText}>
-                                    {text}
-                                </Text>
-                            ))
-                        ))
-                    }
-                </View>
-            }
-            {
-                messages.length > 1 &&
-                messages.map((it, index) => renderItem(it, index))
+                messages.length > 0 &&
+                messages.map((item, index) => renderItem(item, index))
             }
 
             {
