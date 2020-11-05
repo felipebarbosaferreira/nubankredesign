@@ -17,11 +17,12 @@ import LottieView from 'lottie-react-native';
 
 import ChatShowMessages from '../../components/ChatShowMessages';
 
+import assistant from '../../services/assistant';
+
 export default function Assistant({ navigation }) {
 
-    const [loadOnProgress, setLoadOnProgress] = useState(false);
     const [messages, setMessages] = useState([]);
-    const [welcomeMessage, setWelcomeMessage] = useState();
+    const [welcomeMessage, setWelcomeMessage] = useState(false);
     const [loadOnProgressMessageUser, setLoadOnProgressMessageUser] = useState(false);
     const [loadOnProgressMessageBot, setLoadOnProgressMessageBot] = useState(false);
 
@@ -40,27 +41,22 @@ export default function Assistant({ navigation }) {
         animationMic.current.reset();
     }
 
+    const isLoadingData = () => {
+        animationRipple.current.reset() // stop ripple
+    }
+
+    const isLoadingDataFinished = () => {
+        setMicVisible()
+        animationRipple.current.play() // play ripple
+    }
+
     const getMessages = () => {
-        console.log(messages)
+        // console.log(messages)
         return messages
     }
 
     const setAnimDataReceived = () => {
-        // animationMic.current.play(181, 192); // return mic effect
-        setTimeout(() => {
-            setMessages(
-                [
-                    ...getMessages(),
-                    {
-                        texts: [
-                            "Quero transferir dindin, consegue me da um help com isso?",
-                        ],
-                        fromUser: true,
-                    },
-                ]
-            )
-            setLoadOnProgressMessageUser(false)
-        }, 450);
+        isLoadingDataFinished();
     }
 
     const finishMock = () => {
@@ -129,21 +125,82 @@ export default function Assistant({ navigation }) {
 
     const setAnimDataLoad = () => {
         animationMic.current.play(160, 172); // enter load effect
-
-        setLoadOnProgressMessageUser(true);
-
         setTimeout(() => { animationMic.current.play(172, 180) }, 450); // load spinning effect
-
-        setTimeout(() => { setAnimDataReceived() }, 5000)
     }
 
     const setAnimRecognizingVoice = () => {
         isLoadingData();
-
         animationMic.current.play(115, 127); // hide mic effect
         setTimeout(() => { animationMic.current.play(38, 72) }, 450); // recognizing effect
+    }
 
-        setTimeout(() => { setAnimDataLoad() }, 5000);
+    async function sendMessage(message) {
+        setAnimDataLoad()
+
+        // TODO call api
+        const response = await assistant.sendMessageText(message);
+        setAnimDataReceived()
+        // TODO reproduce audio
+        // TODO return texts api
+        
+        // console.log('response.output.texts', response.output.texts);
+        return response;
+    }
+
+    async function sendUserMessage() {
+        setAnimRecognizingVoice()
+        
+        setLoadOnProgressMessageUser(true)
+
+        // TODO get input voice user
+
+        isLoadingData()
+        const responseToUser = await sendMessage("Quero enviar dinheiro")
+
+        const { textRecognized } = responseToUser.input
+        const textsToUser = responseToUser.output
+
+        // TODO reproduce audio from response assistant
+
+        setLoadOnProgressMessageUser(false)
+        const msg = [...messages, {
+            fromUser: true,
+            texts: [
+                textRecognized,
+            ],
+        }];
+        setMessages(msg)
+
+        setLoadOnProgressMessageBot(true)
+        setTimeout(() => { 
+            
+            setMessages([...msg, {
+                fromUser: false,
+                ...textsToUser,
+            }])
+            setLoadOnProgressMessageBot(false)
+        }, 1500);
+
+        isLoadingDataFinished()
+    }
+
+    async function getWelcomeMessage() {
+        setWelcomeMessage(true)
+        
+        setLoadOnProgressMessageBot(true)
+
+        isLoadingData()
+
+        const welcomeMsg = await sendMessage("oi")
+
+        setLoadOnProgressMessageBot(false)
+
+        setMessages([...messages, {
+            firstMessage: true,
+            ...welcomeMsg.output,
+        }])
+
+        isLoadingDataFinished()
     }
 
     const getRippleAnim = () => {
@@ -161,7 +218,7 @@ export default function Assistant({ navigation }) {
     const getMicAnim = () => {
         // Animation by Hicy Wonder https://lottiefiles.com/643-aispeech-mic
         return (
-            <TouchableOpacity style={S.buttonMic} onPress={() => setAnimRecognizingVoice()}>
+            <TouchableOpacity style={S.buttonMic} onPress={() => sendUserMessage()}>
                 <LottieView
                     ref={animationMic}
                     style={S.animationMic}
@@ -172,47 +229,11 @@ export default function Assistant({ navigation }) {
         );
     };
 
-    async function sendMessage(message) {
-        // TODO call api
-        // TODO reproduce audio
-        // TODO return texts api
-        return {
-            texts: [
-                "Oi!",
-                "Em que posso te ajudar?"
-            ],
-        }
-    }
-
-    async function getWelcomeMessage() {
-        setMicVisible()
-        isLoadingData()
-        const welcomeMsg = await sendMessage("oi");
-        setWelcomeMessage(true)
-        setMessages([...messages, {
-            firstMessage: true,
-            ...welcomeMsg,
-        }])
-        isLoadingDataFinished()
-    }
-
-    function isLoadingData() {
-        animationRipple.current.reset() // stop ripple
-        setLoadOnProgress(true);
-    }
-
-    function isLoadingDataFinished() {
-        animationRipple.current.play() // play ripple
-        setLoadOnProgress(false);
-    }
-
     useEffect(() => {
 
         !welcomeMessage && getWelcomeMessage()
 
-        messages.length === 2 && finishMock()
-
-    }, [loadOnProgress, messages])
+    }, [messages])
 
     return (
         <View style={S.container}>

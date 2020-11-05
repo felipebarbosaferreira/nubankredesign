@@ -144,7 +144,7 @@ const ChatShowMessages = ({ messages = [], showLoadingDotsUser = false, showLoad
             return toShow
         }
 
-        if (index === 0) {
+        if (item.firstMessage) {
             return renderItemFirstPosition(item)
         }
 
@@ -159,7 +159,6 @@ const ChatShowMessages = ({ messages = [], showLoadingDotsUser = false, showLoad
             onContentSizeChange={() => scrollViewRef.scrollToEnd({ animated: true })}
         >
             {
-                messages.length > 0 &&
                 messages.map((item, index) => renderItem(item, index))
             }
 
