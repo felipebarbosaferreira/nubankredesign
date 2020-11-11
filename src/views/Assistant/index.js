@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, TouchableOpacity, } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Alert } from 'react-native';
+import * as Permissions from 'expo-permissions';
+
 
 import nuSymbol from '../../assets/nu_symbol_offwhite.png';
 
@@ -19,6 +21,8 @@ import ChatShowMessages from '../../components/ChatShowMessages';
 
 import assistant from '../../services/assistant';
 
+const GRANTED = 'granted';
+
 export default function Assistant({ navigation }) {
 
     const [messages, setMessages] = useState([]);
@@ -29,12 +33,37 @@ export default function Assistant({ navigation }) {
     const animationMic = useRef(null);
     const animationRipple = useRef(null);
 
+    const showAlertPermissionAudioRecordingNotEnabled = () =>
+        Alert.alert(
+            "Olá",
+            'Você ainda não ativou a permissão de áudio. Para conversamos você pode habilitar a gravação de áudio para esse app ;)',
+        );
+
+    async function askForPermissionAudioRecording() {
+        const { status, permissions } = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
+        if (status !== GRANTED) {
+            showAlertPermissionAudioRecordingNotEnabled()
+            return;
+        }
+        return true;
+    }
+
+    async function checkPermissionAudioRecording() {
+        const { status } = await Permissions.getAsync(Permissions.AUDIO_RECORDING);
+        if (status !== GRANTED) {
+            return await askForPermissionAudioRecording();
+        }
+        return true;
+    }
+
+
+
     const getIcon = ({ iconKey }) => {
         return (
             <FontAwesomeIcon icon={getIconByKey(iconKey)} size={24} color={white} />
         );
     };
-    
+
     const setMicVisible = () => {
         animationMic.current.play(181, 192); // return mic effect
         animationMic.current.play(193, 194);
@@ -61,7 +90,7 @@ export default function Assistant({ navigation }) {
 
     const finishMock = () => {
         setLoadOnProgressMessageBot(true)
-        setTimeout(() => { 
+        setTimeout(() => {
             setMessages(
                 [
                     ...getMessages(),
@@ -90,36 +119,36 @@ export default function Assistant({ navigation }) {
                                             name: {
                                                 stringValue: "maira",
                                                 kind: "stringValue"
-                                           }
-                                       }
-                                   },
+                                            }
+                                        }
+                                    },
                                     kind: "structValue"
-                               },
+                                },
                                 currencyName: {
                                     stringValue: "BRL",
                                     kind: "stringValue"
-                               },
+                                },
                                 transferir: {
                                     stringValue: "transferir",
                                     kind: "stringValue"
-                               },
+                                },
                                 valor: {
                                     numberValue: 100,
                                     kind: "numberValue"
-                               },
+                                },
                                 showToUser: {
                                     stringValue: "cardRealizarTransferencia",
                                     kind: "stringValue",
-                               },
-                           },
-                       },
+                                },
+                            },
+                        },
                     },
                 ]
             )
 
-        setLoadOnProgressMessageBot(false)
-        setMicVisible()
-        isLoadingDataFinished();
+            setLoadOnProgressMessageBot(false)
+            setMicVisible()
+            isLoadingDataFinished();
         }, 2000)
     }
 
@@ -142,14 +171,18 @@ export default function Assistant({ navigation }) {
         setAnimDataReceived()
         // TODO reproduce audio
         // TODO return texts api
-        
+
         // console.log('response.output.texts', response.output.texts);
         return response;
     }
 
     async function sendUserMessage() {
+        const permissionAudioRecording = await checkPermissionAudioRecording();
+        if (!permissionAudioRecording) {
+            return;
+        }
         setAnimRecognizingVoice()
-        
+
         setLoadOnProgressMessageUser(true)
 
         // TODO get input voice user
@@ -172,8 +205,8 @@ export default function Assistant({ navigation }) {
         setMessages(msg)
 
         setLoadOnProgressMessageBot(true)
-        setTimeout(() => { 
-            
+        setTimeout(() => {
+
             setMessages([...msg, {
                 fromUser: false,
                 ...textsToUser,
@@ -186,7 +219,7 @@ export default function Assistant({ navigation }) {
 
     async function getWelcomeMessage() {
         setWelcomeMessage(true)
-        
+
         setLoadOnProgressMessageBot(true)
 
         isLoadingData()
@@ -243,10 +276,10 @@ export default function Assistant({ navigation }) {
             </View>
 
             <View style={S.content}>
-                <ChatShowMessages 
-                    messages={messages} 
-                    showLoadingDotsUser={loadOnProgressMessageUser} 
-                    showLoadingDotsBot={loadOnProgressMessageBot} 
+                <ChatShowMessages
+                    messages={messages}
+                    showLoadingDotsUser={loadOnProgressMessageUser}
+                    showLoadingDotsBot={loadOnProgressMessageBot}
                 />
             </View>
 

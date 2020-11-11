@@ -9,7 +9,7 @@ async function sendMessageText(text) {
     return await api()
         .post('/api/message/text/send', {
             text, 
-            email: "felipe@gmail.com", // TODO get from user
+            email: "felipebarbosaferreira@gmail.com", // TODO get from user
             sessionId: "123", // TODO make uuid for session conversation
         })
         .then(response => {

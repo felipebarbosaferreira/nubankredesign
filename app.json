@@ -18,14 +18,16 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.github.felipebarbosaferreira.nubankredesing"
     },
     "web": {
       "favicon": "./src/assets/nu_symbol_offwhite.png"
     },
     "android": {
       "package": "com.github.felipebarbosaferreira.nubankredesing",
-      "icon": "./src/assets/nu_symbol_offwhite.png"
+      "icon": "./src/assets/nu_symbol_offwhite.png",
+      "permissions": [ "AUDIO_RECORDING" ]
     }
   }
 }
