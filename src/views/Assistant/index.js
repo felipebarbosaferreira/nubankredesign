@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Image, TouchableOpacity, Alert } from 'react-native';
 import * as Permissions from 'expo-permissions';
-
+import { Audio } from 'expo-av';
 
 import nuSymbol from '../../assets/nu_symbol_offwhite.png';
 
@@ -29,20 +29,26 @@ export default function Assistant({ navigation }) {
     const [welcomeMessage, setWelcomeMessage] = useState(false);
     const [loadOnProgressMessageUser, setLoadOnProgressMessageUser] = useState(false);
     const [loadOnProgressMessageBot, setLoadOnProgressMessageBot] = useState(false);
+    const [recording, setRecording] = useState();
 
     const animationMic = useRef(null);
     const animationRipple = useRef(null);
+
+    const gotToHome = () => navigation.navigate('Home');
 
     const showAlertPermissionAudioRecordingNotEnabled = () =>
         Alert.alert(
             "Olá",
             'Você ainda não ativou a permissão de áudio. Para conversamos você pode habilitar a gravação de áudio para esse app ;)',
+            [
+                { text: "OK", onPress: () => gotToHome() }
+            ],
+            { cancelable: false }
         );
 
     async function askForPermissionAudioRecording() {
         const { status, permissions } = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
         if (status !== GRANTED) {
-            showAlertPermissionAudioRecordingNotEnabled()
             return;
         }
         return true;
@@ -176,12 +182,25 @@ export default function Assistant({ navigation }) {
         return response;
     }
 
-    async function sendUserMessage() {
-        const permissionAudioRecording = await checkPermissionAudioRecording();
-        if (!permissionAudioRecording) {
-            return;
-        }
+    async function recordVoiceUser() {
         setAnimRecognizingVoice()
+
+        try {
+            await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
+            await recording.startAsync();
+            // You are now recording!
+        } catch (error) {
+            // An error occurred!
+            setMicVisible()
+            console.error('recordVoiceUser error', error)
+        }
+
+    }
+
+    async function sendUserMessage() {
+        setAnimRecognizingVoice()
+        
+        // await recordVoiceUser();
 
         setLoadOnProgressMessageUser(true)
 
@@ -234,6 +253,13 @@ export default function Assistant({ navigation }) {
         }])
 
         isLoadingDataFinished()
+
+        // TODO make checkPermissionAudioRecording be first thing
+        const permissionAudioRecording = await checkPermissionAudioRecording();
+        if (!permissionAudioRecording) {
+            showAlertPermissionAudioRecordingNotEnabled()
+        }
+        setRecording(new Audio.Recording());
     }
 
     const getRippleAnim = () => {
