@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Image, TouchableOpacity, Alert } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { Audio } from 'expo-av';
+import * as FileSystem from "expo-file-system";
 
 import nuSymbol from '../../assets/nu_symbol_offwhite.png';
 
@@ -23,13 +24,34 @@ import assistant from '../../services/assistant';
 
 const GRANTED = 'granted';
 
+const RECORDING_OPTIONS = {
+    // android not currently in use, but parameters are required
+    android: {
+        extension: '.wav',
+        sampleRate: 8000,
+        numberOfChannels: 1,
+        bitRate: 128000,
+    },
+    ios: {
+        extension: '.wav',
+        audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
+        sampleRate: 8000,
+        numberOfChannels: 1,
+        bitRate: 128000,
+        linearPCMBitDepth: 16,
+        linearPCMIsBigEndian: false,
+        linearPCMIsFloat: false,
+    },
+};
+
+
 export default function Assistant({ navigation }) {
 
     const [messages, setMessages] = useState([]);
     const [welcomeMessage, setWelcomeMessage] = useState(false);
     const [loadOnProgressMessageUser, setLoadOnProgressMessageUser] = useState(false);
     const [loadOnProgressMessageBot, setLoadOnProgressMessageBot] = useState(false);
-    const [recording, setRecording] = useState();
+    const [recording, setRecording] = useState(new Audio.Recording());
 
     const animationMic = useRef(null);
     const animationRipple = useRef(null);
@@ -169,11 +191,17 @@ export default function Assistant({ navigation }) {
         setTimeout(() => { animationMic.current.play(38, 72) }, 450); // recognizing effect
     }
 
-    async function sendMessage(message) {
+    async function sendMessage(message, isAudio = false) {
         setAnimDataLoad()
 
         // TODO call api
-        const response = await assistant.sendMessageText(message);
+        let response;
+        if (isAudio) {
+            const audioPath = message.uri
+            response = await assistant.sendMessageAudio(audioPath)
+        } else {
+            response = await assistant.sendMessageText(message)
+        }
         setAnimDataReceived()
         // TODO reproduce audio
         // TODO return texts api
@@ -182,13 +210,75 @@ export default function Assistant({ navigation }) {
         return response;
     }
 
+    async function play() {
+        await Audio.setAudioModeAsync({
+            allowsRecordingIOS: false,
+            interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+            playsInSilentModeIOS: true,
+            shouldDuckAndroid: true,
+            interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+            playThroughEarpieceAndroid: false,
+            staysActiveInBackground: true,
+          });
+          const { sound, status } = await recording.createNewLoadedSoundAsync(
+            {
+              isLooping: true,
+              isMuted: false,
+              volume: 1.0,
+              rate: 1.0,
+              shouldCorrectPitch: true,
+            }
+          );
+          sound.playAsync();
+    }
+
+    async function recordVoiceUserStop(resolve) {
+        try {
+            await recording.stopAndUnloadAsync();
+        } catch (error) {
+            // On Android, calling stop before any data has been collected results in
+            // an E_AUDIO_NODATA error. This means no audio data has been written to
+            // the output file is invalid.
+            if (error.code === "E_AUDIO_NODATA") {
+                console.log(
+                    `Stop was called too quickly, no data has yet been received (${error.message})`
+                );
+            } else {
+                console.log("STOP ERROR: ", error.code, error.name, error.message);
+            }
+            return;
+        }
+        const infoAudioRecorded = await FileSystem.getInfoAsync(recording.getURI() || "");
+        // console.log(`FILE INFO: ${JSON.stringify(info)}`);
+        // await play() // TODO delete play(), used in test to listen to the recorded audio
+
+        resolve(infoAudioRecorded)
+    }
+
+    function recordVoiceUserDelayToStop() {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                recordVoiceUserStop(resolve)
+            }, 5000)
+        })
+    }
+
     async function recordVoiceUser() {
         setAnimRecognizingVoice()
 
         try {
-            await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
+            await recording.prepareToRecordAsync(RECORDING_OPTIONS);
             await recording.startAsync();
             // You are now recording!
+
+            // recordVoiceUserStop() // TODO stop recording audio with recognition that the user has stopped speaking, something like react-native-voice
+            return await recordVoiceUserDelayToStop()
+                .then(response => {
+                    console.log('response record', response)
+                    return response;
+                })
+                .catch(error => console.log('error on record', error))
+
         } catch (error) {
             // An error occurred!
             setMicVisible()
@@ -199,15 +289,15 @@ export default function Assistant({ navigation }) {
 
     async function sendUserMessage() {
         setAnimRecognizingVoice()
-        
-        // await recordVoiceUser();
+
+        const audioRecordInfo = await recordVoiceUser();
 
         setLoadOnProgressMessageUser(true)
 
         // TODO get input voice user
 
         isLoadingData()
-        const responseToUser = await sendMessage("Quero enviar dinheiro")
+        const responseToUser = await sendMessage(audioRecordInfo, true)
 
         const { textRecognized } = responseToUser.input
         const textsToUser = responseToUser.output
@@ -234,6 +324,7 @@ export default function Assistant({ navigation }) {
         }, 1500);
 
         isLoadingDataFinished()
+        setRecording(new Audio.Recording());
     }
 
     async function getWelcomeMessage() {
@@ -259,7 +350,6 @@ export default function Assistant({ navigation }) {
         if (!permissionAudioRecording) {
             showAlertPermissionAudioRecordingNotEnabled()
         }
-        setRecording(new Audio.Recording());
     }
 
     const getRippleAnim = () => {
