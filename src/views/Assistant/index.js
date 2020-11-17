@@ -32,6 +32,8 @@ const RECORDING_OPTIONS = {
         numberOfChannels: 1,
         bitRate: 128000,
     },
+
+    // TODO test config iOS
     ios: {
         extension: '.wav',
         audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
@@ -58,6 +60,9 @@ export default function Assistant({ navigation }) {
 
     const gotToHome = () => navigation.navigate('Home');
 
+    // TODO separate responsibilities into other files
+
+    // Permission Audio Recording
     const showAlertPermissionAudioRecordingNotEnabled = () =>
         Alert.alert(
             "Olá",
@@ -84,14 +89,8 @@ export default function Assistant({ navigation }) {
         return true;
     }
 
-
-
-    const getIcon = ({ iconKey }) => {
-        return (
-            <FontAwesomeIcon icon={getIconByKey(iconKey)} size={24} color={white} />
-        );
-    };
-
+    
+    // Animation control
     const setMicVisible = () => {
         animationMic.current.play(181, 192); // return mic effect
         animationMic.current.play(193, 194);
@@ -107,77 +106,8 @@ export default function Assistant({ navigation }) {
         animationRipple.current.play() // play ripple
     }
 
-    const getMessages = () => {
-        // console.log(messages)
-        return messages
-    }
-
     const setAnimDataReceived = () => {
         isLoadingDataFinished();
-    }
-
-    const finishMock = () => {
-        setLoadOnProgressMessageBot(true)
-        setTimeout(() => {
-            setMessages(
-                [
-                    ...getMessages(),
-                    {
-                        texts: [
-                            "Qual o valor?",
-                        ],
-                    },
-                    {
-                        texts: [
-                            "R$ 200",
-                        ],
-                    },
-                    {
-                        texts: [
-                            "appAction",
-                        ],
-                        isAppAction: true,
-                        appAction: {
-                            action: "transferencia.realizar",
-                            showToUser: "cardRealizarTransferencia",
-                            fields: {
-                                person: {
-                                    structValue: {
-                                        fields: {
-                                            name: {
-                                                stringValue: "Ana Maira",
-                                                kind: "stringValue"
-                                            }
-                                        }
-                                    },
-                                    kind: "structValue"
-                                },
-                                currencyName: {
-                                    stringValue: "BRL",
-                                    kind: "stringValue"
-                                },
-                                transferir: {
-                                    stringValue: "transferir",
-                                    kind: "stringValue"
-                                },
-                                valor: {
-                                    numberValue: 100,
-                                    kind: "numberValue"
-                                },
-                                showToUser: {
-                                    stringValue: "cardRealizarTransferencia",
-                                    kind: "stringValue",
-                                },
-                            },
-                        },
-                    },
-                ]
-            )
-
-            setLoadOnProgressMessageBot(false)
-            setMicVisible()
-            isLoadingDataFinished();
-        }, 2000)
     }
 
     const setAnimDataLoad = () => {
@@ -191,25 +121,7 @@ export default function Assistant({ navigation }) {
         setTimeout(() => { animationMic.current.play(38, 72) }, 450); // recognizing effect
     }
 
-    async function sendMessage(message, isAudio = false) {
-        setAnimDataLoad()
-
-        // TODO call api
-        let response;
-        if (isAudio) {
-            const audioPath = message.uri
-            response = await assistant.sendMessageAudio(audioPath)
-        } else {
-            response = await assistant.sendMessageText(message)
-        }
-        setAnimDataReceived()
-        // TODO reproduce audio
-        // TODO return texts api
-
-        // console.log('response.output.texts', response.output.texts);
-        return response;
-    }
-
+    // Audio play
     async function play() {
         await Audio.setAudioModeAsync({
             allowsRecordingIOS: false,
@@ -232,6 +144,8 @@ export default function Assistant({ navigation }) {
           sound.playAsync();
     }
 
+
+    // Audio record
     async function recordVoiceUserStop(resolve) {
         try {
             await recording.stopAndUnloadAsync();
@@ -285,6 +199,27 @@ export default function Assistant({ navigation }) {
             console.error('recordVoiceUser error', error)
         }
 
+    }
+
+
+    // Send messages
+    async function sendMessage(message, isAudio = false) {
+        setAnimDataLoad()
+
+        // TODO call api
+        let response;
+        if (isAudio) {
+            const audioPath = message.uri
+            response = await assistant.sendMessageAudio(audioPath)
+        } else {
+            response = await assistant.sendMessageText(message)
+        }
+        setAnimDataReceived()
+        // TODO reproduce audio
+        // TODO return texts api
+
+        // console.log('response.output.texts', response.output.texts);
+        return response;
     }
 
     async function sendUserMessage() {
@@ -352,6 +287,14 @@ export default function Assistant({ navigation }) {
         }
     }
 
+
+    // Renders
+    const getIcon = ({ iconKey }) => {
+        return (
+            <FontAwesomeIcon icon={getIconByKey(iconKey)} size={24} color={white} />
+        );
+    };
+
     const getRippleAnim = () => {
         return (
             <TouchableOpacity style={S.buttonMic}>
@@ -377,6 +320,76 @@ export default function Assistant({ navigation }) {
             </TouchableOpacity>
         );
     };
+
+    // TODO delete
+    const getMessages = () => {
+        // console.log(messages)
+        return messages
+    }
+    const finishMock = () => {
+        setLoadOnProgressMessageBot(true)
+        setTimeout(() => {
+            setMessages(
+                [
+                    ...getMessages(),
+                    {
+                        texts: [
+                            "Qual o valor?",
+                        ],
+                    },
+                    {
+                        texts: [
+                            "R$ 200",
+                        ],
+                    },
+                    {
+                        texts: [
+                            "appAction",
+                        ],
+                        isAppAction: true,
+                        appAction: {
+                            action: "transferencia.realizar",
+                            showToUser: "cardRealizarTransferencia",
+                            fields: {
+                                person: {
+                                    structValue: {
+                                        fields: {
+                                            name: {
+                                                stringValue: "Ana Maira",
+                                                kind: "stringValue"
+                                            }
+                                        }
+                                    },
+                                    kind: "structValue"
+                                },
+                                currencyName: {
+                                    stringValue: "BRL",
+                                    kind: "stringValue"
+                                },
+                                transferir: {
+                                    stringValue: "transferir",
+                                    kind: "stringValue"
+                                },
+                                valor: {
+                                    numberValue: 100,
+                                    kind: "numberValue"
+                                },
+                                showToUser: {
+                                    stringValue: "cardRealizarTransferencia",
+                                    kind: "stringValue",
+                                },
+                            },
+                        },
+                    },
+                ]
+            )
+
+            setLoadOnProgressMessageBot(false)
+            setMicVisible()
+            isLoadingDataFinished();
+        }, 2000)
+    }
+    // TODO delete
 
     useEffect(() => {
 
