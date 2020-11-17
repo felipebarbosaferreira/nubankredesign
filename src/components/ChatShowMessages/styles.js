@@ -93,6 +93,15 @@ const styles = StyleSheet.create({
         ...DOTS_SIZE,
         backgroundColor: Colors.mediumPurple,
     },
+
+
+
+    animationMoneyTransfer: {
+        width: 300,
+        height: 300,
+        backgroundColor: Colors.purple,
+        alignSelf: 'center',
+    },
 })
 
 export default styles;

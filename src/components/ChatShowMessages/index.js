@@ -17,10 +17,12 @@ import {
 import { getValueFormatted, } from '../../utils/formatCurrency';
 
 const CARD_TRANSFER_MONEY = 'cardRealizarTransferencia';
+const ANIMATION_TRANSFER_MONEY = 'animacaoRealizarTransferencia';
 
 const ChatShowMessages = ({ messages = [], showLoadingDotsUser = false, showLoadingDotsBot = false, }) => {
     const animationDotsLoadingBot = useRef(null);
     const animationDotsLoadingUser = useRef(null);
+    const animationMoneyTransfer = useRef(null);
 
     const [scrollViewRef, setScrollViewRef] = useState(null);
 
@@ -60,13 +62,32 @@ const ChatShowMessages = ({ messages = [], showLoadingDotsUser = false, showLoad
         );
     };
 
+    const getAnimMoneyTransfer = index => {
+        // Animation by Võ Quân https://lottiefiles.com/7825-money-transfer
+        return (
+            <LottieView
+                key={`${index}`}
+                ref={animationMoneyTransfer}
+                style={S.animationMoneyTransfer}
+                source={require('../../assets/anim/moneyTransfer.json')}
+                autoPlay={true}
+                speed={0.7}
+                loop={false} // TODO add api callback control, example do not show ok if api return error
+            />
+        );
+    };
+
     const getCardTrasnferMoney = (item, index) => {
-        const messageConfirmation = 'Tudo certo?'; // TODO get from response API
-        const contact = 'Maria Silva';
+        const { valor, person } = item.appAction.fields;
+        const messageConfirmation = 'Tudo certo?'; 
+        // TODO get from response API, search for user in contacts
+        const contact = person.structValue.fields.name.stringValue;
         const numberAg = '0001';
         const numberCt = '123654-7';
-        const amountMoney = 200;
+        const amountMoney = valor.numberValue;
 
+        // TODO save user data to send to api, if user confirms
+        
         return (
             <View key={`${index}`}>
                 <View style={S.cardTrasnferMoney}>
@@ -114,12 +135,13 @@ const ChatShowMessages = ({ messages = [], showLoadingDotsUser = false, showLoad
             ...isLastMessage(messages.length, index),
         }
 
+        // TODO make a much better way to format text
         return (
             <View key={`${index}`} style={styleItem}>
                 {
                     item.texts.map((text, index) => (
                         <Text key={`text${index}`} style={S.messageText}>
-                            {text}
+                            {text.replace('r$', 'R$')}
                         </Text>
                     ))
                 }
@@ -135,6 +157,11 @@ const ChatShowMessages = ({ messages = [], showLoadingDotsUser = false, showLoad
             switch (item.appAction.showToUser) {
                 case CARD_TRANSFER_MONEY:
                     toShow = getCardTrasnferMoney(item, index)
+                    break;
+
+                case ANIMATION_TRANSFER_MONEY:
+                    toShow = getAnimMoneyTransfer(index)
+                    break;
 
                 default:
                     // console.log("nothing to show")

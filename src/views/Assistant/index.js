@@ -145,7 +145,7 @@ export default function Assistant({ navigation }) {
                                     structValue: {
                                         fields: {
                                             name: {
-                                                stringValue: "maira",
+                                                stringValue: "Ana Maira",
                                                 kind: "stringValue"
                                             }
                                         }
