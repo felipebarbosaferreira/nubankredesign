@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, Alert } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { Audio } from 'expo-av';
 import * as FileSystem from "expo-file-system";
+import * as Speech from 'expo-speech';
 
 import nuSymbol from '../../assets/nu_symbol_offwhite.png';
 
@@ -122,7 +123,7 @@ export default function Assistant({ navigation }) {
     }
 
     // Audio play
-    async function play() {
+    async function playAudioFromRecorded() {
         await Audio.setAudioModeAsync({
             allowsRecordingIOS: false,
             interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
@@ -144,6 +145,15 @@ export default function Assistant({ navigation }) {
           sound.playAsync();
     }
 
+    function playAudioFromText(output) {
+        const messagesToSpeech = output.texts || [];
+        
+        messagesToSpeech.forEach(message => {
+            Speech.speak(message.replace(/[;:\)\(]/g, ""), {
+                language: 'pt-BR',
+            })
+        });
+    }
 
     // Audio record
     async function recordVoiceUserStop(resolve) {
@@ -255,6 +265,7 @@ export default function Assistant({ navigation }) {
                 fromUser: false,
                 ...textsToUser,
             }])
+            playAudioFromText(textsToUser)
             setLoadOnProgressMessageBot(false)
         }, 1500);
 
@@ -277,6 +288,8 @@ export default function Assistant({ navigation }) {
             firstMessage: true,
             ...welcomeMsg.output,
         }])
+
+        playAudioFromText(welcomeMsg.output)
 
         isLoadingDataFinished()
 
