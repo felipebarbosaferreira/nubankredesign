@@ -245,18 +245,27 @@ export default function Assistant({ navigation }) {
         const responseToUser = await sendMessage(audioRecordInfo, true)
 
         const { textRecognized } = responseToUser.input
-        const textsToUser = responseToUser.output
+        let textsToUser = responseToUser.output
 
-        // TODO reproduce audio from response assistant
+        const msg = [...messages];
+
+        if (textRecognized) {
+            msg.push({
+                fromUser: true,
+                texts: [
+                    textRecognized,
+                ],
+            });
+            setMessages(msg)
+        } else {
+            textsToUser = {
+                texts: [
+                    `Hummm, não entendi`,
+                ],
+            }
+        }
 
         setLoadOnProgressMessageUser(false)
-        const msg = [...messages, {
-            fromUser: true,
-            texts: [
-                textRecognized,
-            ],
-        }];
-        setMessages(msg)
 
         setLoadOnProgressMessageBot(true)
         setTimeout(() => {
@@ -265,7 +274,21 @@ export default function Assistant({ navigation }) {
                 fromUser: false,
                 ...textsToUser,
             }])
-            playAudioFromText(textsToUser)
+
+            if (textsToUser.isAppAction) {
+                const { messageConfirmation } = textsToUser.appAction
+                if (messageConfirmation) {
+                    const confirmationAction = {
+                        texts: [
+                            messageConfirmation,
+                        ],
+                    }
+                    playAudioFromText(confirmationAction)
+                }
+            } else {
+                playAudioFromText(textsToUser)
+            }
+
             setLoadOnProgressMessageBot(false)
         }, 1500);
 

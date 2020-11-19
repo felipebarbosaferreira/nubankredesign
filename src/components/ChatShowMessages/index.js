@@ -79,7 +79,7 @@ const ChatShowMessages = ({ messages = [], showLoadingDotsUser = false, showLoad
 
     const getCardTrasnferMoney = (item, index) => {
         const { valor, person } = item.appAction.fields;
-        const messageConfirmation = 'Tudo certo?'; 
+        const messageConfirmation = item.appAction.messageConfirmation || 'Tudo certo?'; 
         // TODO get from response API, search for user in contacts
         const contact = person.structValue.fields.name.stringValue;
         const numberAg = '0001';
