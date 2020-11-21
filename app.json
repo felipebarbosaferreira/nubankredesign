@@ -1,14 +1,15 @@
 {
   "expo": {
-    "name": "nubankredesing",
-    "slug": "nubankredesing",
+    "name": "Nubank Redesing",
+    "slug": "nubankredesign",
+    "description": "Projeto Nubank Redesign com Assistente Virtual feito em React Native",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/icon.png",
+    "githubUrl": "https://github.com/felipebarbosaferreira/nubankredesign.git",
+    "icon": "./src/assets/nu_symbol_offwhite.png",
     "splash": {
-      "image": "./src/assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#82269e"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -17,10 +18,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.github.felipebarbosaferreira.nubankredesign"
     },
     "web": {
-      "favicon": "./src/assets/favicon.png"
+      "favicon": "./src/assets/nu_symbol_offwhite.png"
+    },
+    "android": {
+      "package": "com.github.felipebarbosaferreira.nubankredesign",
+      "icon": "./src/assets/nu_symbol_offwhite.png"
     }
   }
 }

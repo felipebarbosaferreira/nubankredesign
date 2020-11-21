@@ -1,21 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+
+import Splash from './src/views/Splash';
+import Home from './src/views/Home';
+import Assistant from './src/views/Assistant';
+
+const Routes = createAppContainer(
+  createSwitchNavigator({
+    Splash,
+    Home,
+    Assistant,
+  })
+);
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={S.safeAreaView}>
+      <Routes />
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
+const S = StyleSheet.create({
+  safeAreaView: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
