@@ -34,7 +34,7 @@ const RECORDING_OPTIONS = {
         bitRate: 128000,
     },
 
-    // TODO test config iOS
+    // TODO test this config iOS
     ios: {
         extension: '.wav',
         audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
@@ -226,7 +226,6 @@ export default function Assistant({ navigation }) {
     async function sendMessage(message, isAudio = false) {
         setAnimDataLoad()
 
-        // TODO call api
         let response;
         if (isAudio) {
             const audioPath = message.uri
@@ -235,10 +234,8 @@ export default function Assistant({ navigation }) {
             response = await assistant.sendMessageText(message)
         }
         setAnimDataReceived()
-        // TODO reproduce audio
-        // TODO return texts api
 
-        // console.log('response.output.texts', response.output.texts);
+        // console.log('response.output.texts', response.output.texts); // From Dialogflow
         return response;
     }
 
@@ -248,8 +245,6 @@ export default function Assistant({ navigation }) {
         const audioRecordInfo = await recordVoiceUser();
 
         setLoadOnProgressMessageUser(true)
-
-        // TODO get input voice user
 
         isLoadingData()
         const responseToUser = await sendMessage(audioRecordInfo, true)
@@ -340,6 +335,7 @@ export default function Assistant({ navigation }) {
     };
 
     const getRippleAnim = () => {
+        // Animation by Igor Shadko https://lottiefiles.com/3108-ripple
         return (
             <TouchableOpacity style={S.buttonMic}>
                 <LottieView
@@ -396,8 +392,10 @@ export default function Assistant({ navigation }) {
             </View>
 
             <TouchableOpacity style={S.buttonKeyboard}>
-                {getIcon({ iconKey: iconRegularKeyboard })}
+                {getIcon({ iconKey: iconRegularKeyboard })} 
             </TouchableOpacity>
         </View>
     )
+    
+    // TODO make keyboard work to communicate by text
 }

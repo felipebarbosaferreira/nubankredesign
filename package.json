@@ -2,7 +2,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "version": "1.0.0",
   "author": "Felipe Barbosa Ferreira",
-  "description": "Projeto Nubank Redesign React Native Expo com comunicacao Agent Dialogflow",
+  "description": "Projeto Nubank Redesign com React Native & Expo fazendo comunicação com o Agent Dialogflow",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
