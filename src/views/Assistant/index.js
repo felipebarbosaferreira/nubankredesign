@@ -55,6 +55,7 @@ export default function Assistant({ navigation }) {
     const [loadOnProgressMessageUser, setLoadOnProgressMessageUser] = useState(false);
     const [loadOnProgressMessageBot, setLoadOnProgressMessageBot] = useState(false);
     const [recording, setRecording] = useState(new Audio.Recording());
+    const [havePermissionAudioRecording, setHavePermissionAudioRecording] = useState(false);
 
     const animationMic = useRef(null);
     const animationRipple = useRef(null);
@@ -76,18 +77,27 @@ export default function Assistant({ navigation }) {
 
     async function askForPermissionAudioRecording() {
         const { status, permissions } = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
-        if (status !== GRANTED) {
-            return;
+        if (status === GRANTED) {
+            return true;
         }
-        return true;
+        return;
     }
 
     async function checkPermissionAudioRecording() {
         const { status } = await Permissions.getAsync(Permissions.AUDIO_RECORDING);
-        if (status !== GRANTED) {
-            return await askForPermissionAudioRecording();
+        if (status === GRANTED) {
+            return true;
         }
-        return true;
+        return await askForPermissionAudioRecording();
+    }
+
+    async function alreadyHavePermissionAudioRecording() {
+        // TODO make checkPermissionAudioRecording be first thing
+        const permissionAudioRecordingIsGranted = await checkPermissionAudioRecording();
+        if (!permissionAudioRecordingIsGranted) {
+            return showAlertPermissionAudioRecordingNotEnabled()
+        }
+        setHavePermissionAudioRecording(true)
     }
 
     
@@ -198,7 +208,7 @@ export default function Assistant({ navigation }) {
             // recordVoiceUserStop() // TODO stop recording audio with recognition that the user has stopped speaking, something like react-native-voice
             return await recordVoiceUserDelayToStop()
                 .then(response => {
-                    console.log('response record', response)
+                    // console.log('response record', response)
                     return response;
                 })
                 .catch(error => console.log('error on record', error))
@@ -297,6 +307,10 @@ export default function Assistant({ navigation }) {
     }
 
     async function getWelcomeMessage() {
+        if (!havePermissionAudioRecording) {
+            return;
+        }
+
         setWelcomeMessage(true)
 
         setLoadOnProgressMessageBot(true)
@@ -315,12 +329,6 @@ export default function Assistant({ navigation }) {
         playAudioFromText(welcomeMsg.output)
 
         isLoadingDataFinished()
-
-        // TODO make checkPermissionAudioRecording be first thing
-        const permissionAudioRecording = await checkPermissionAudioRecording();
-        if (!permissionAudioRecording) {
-            showAlertPermissionAudioRecordingNotEnabled()
-        }
     }
 
 
@@ -357,81 +365,13 @@ export default function Assistant({ navigation }) {
         );
     };
 
-    // TODO delete
-    const getMessages = () => {
-        // console.log(messages)
-        return messages
-    }
-    const finishMock = () => {
-        setLoadOnProgressMessageBot(true)
-        setTimeout(() => {
-            setMessages(
-                [
-                    ...getMessages(),
-                    {
-                        texts: [
-                            "Qual o valor?",
-                        ],
-                    },
-                    {
-                        texts: [
-                            "R$ 200",
-                        ],
-                    },
-                    {
-                        texts: [
-                            "appAction",
-                        ],
-                        isAppAction: true,
-                        appAction: {
-                            action: "transferencia.realizar",
-                            showToUser: "cardRealizarTransferencia",
-                            fields: {
-                                person: {
-                                    structValue: {
-                                        fields: {
-                                            name: {
-                                                stringValue: "Ana Maira",
-                                                kind: "stringValue"
-                                            }
-                                        }
-                                    },
-                                    kind: "structValue"
-                                },
-                                currencyName: {
-                                    stringValue: "BRL",
-                                    kind: "stringValue"
-                                },
-                                transferir: {
-                                    stringValue: "transferir",
-                                    kind: "stringValue"
-                                },
-                                valor: {
-                                    numberValue: 100,
-                                    kind: "numberValue"
-                                },
-                                showToUser: {
-                                    stringValue: "cardRealizarTransferencia",
-                                    kind: "stringValue",
-                                },
-                            },
-                        },
-                    },
-                ]
-            )
-
-            setLoadOnProgressMessageBot(false)
-            setMicVisible()
-            isLoadingDataFinished();
-        }, 2000)
-    }
-    // TODO delete
-
     useEffect(() => {
+
+        !havePermissionAudioRecording && alreadyHavePermissionAudioRecording()
 
         !welcomeMessage && getWelcomeMessage()
 
-    }, [messages])
+    }, [messages, havePermissionAudioRecording])
 
     return (
         <View style={S.container}>

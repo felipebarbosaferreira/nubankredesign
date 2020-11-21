@@ -87,7 +87,7 @@ export default function Home({ navigation }) {
                 showsHorizontalScrollIndicator={false} >
                 <TouchableOpacity style={S.buttonCardFirst} onPress={() => navigationToChat()}>
                     {getIcon(iconRegularChat)}
-                    <Text style={S.textButtonList}>Chat</Text>
+                    <Text style={S.textButtonList}>Assistente Virtual</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={S.buttonCard}>

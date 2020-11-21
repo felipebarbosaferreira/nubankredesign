@@ -79,10 +79,10 @@ export const iconEyeSlash = 25
 export const iconCircle = 26
 export const iconGift = 27
 export const iconCoins = 28
-export const iconDonate = 28
-export const iconGamepad = 29
-export const iconKissWinkHeart = 30
-export const iconDollarSign = 31
+export const iconDonate = 29
+export const iconGamepad = 30
+export const iconKissWinkHeart = 31
+export const iconDollarSign = 32
 
 
 const mapIcons = new Map();

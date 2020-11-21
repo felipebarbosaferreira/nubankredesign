@@ -8,9 +8,9 @@ import Assistant from './src/views/Assistant';
 
 const Routes = createAppContainer(
   createSwitchNavigator({
-    Assistant,
     Splash,
     Home,
+    Assistant,
   })
 );
 
