@@ -46,6 +46,7 @@ import {
     faGamepad,
     faKissWinkHeart,
     faDollarSign,
+    faMobileAlt,
 } from '@fortawesome/free-solid-svg-icons';
 
 import * as Regular from '@fortawesome/free-regular-svg-icons';
@@ -83,6 +84,7 @@ export const iconDonate = 29
 export const iconGamepad = 30
 export const iconKissWinkHeart = 31
 export const iconDollarSign = 32
+export const iconMobile = 33
 
 
 const mapIcons = new Map();
@@ -119,6 +121,7 @@ mapIcons.set(iconDonate, faDonate);
 mapIcons.set(iconGamepad, faGamepad);
 mapIcons.set(iconKissWinkHeart, faKissWinkHeart);
 mapIcons.set(iconDollarSign, faDollarSign);
+mapIcons.set(iconMobile, faMobileAlt);
 
 /**
  * Regular icons

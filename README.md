@@ -28,7 +28,7 @@ Utilize a variável de ambiente `BASE_URL_ASSISTANT` para definir a url do seu s
 ## Behance
 https://www.behance.net/gallery/108239475/Nubank-Redesign-Assistente-Virtual
 
-![Nubank Redesign Assistente Virtual com React Native](nubankRedesignAssistenteVirtualComReactNative.png)
+![Nubank Redesign Assistente Virtual com React Native](.github/images/nubankRedesignAssistenteVirtualComReactNative.png)
 
 ## Animações LottieFiles
 * [Mic por Hicy Wonder](https://lottiefiles.com/643-aispeech-mic)

@@ -6,7 +6,7 @@ import * as Typography from '../../styles/typography';
 const buttonCard = {
     width: 90,
     height: 90,
-    marginRight: 15,
+    marginLeft: 15,
     borderRadius: 8,
     padding: 8,
     justifyContent: 'space-between',
@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flex: 1,
         backgroundColor: Colors.background,
+        paddingBottom: 15,
     },
 
     hearder: {
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
 
     buttonsList: {
         flex: 1,
-        marginVertical: 15,
+        marginTop: 15,
         overflow: 'visible',
     },
 
