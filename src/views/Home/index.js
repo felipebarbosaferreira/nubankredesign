@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import DraggableFlatList from "react-native-draggable-flatlist";
 
@@ -30,9 +30,11 @@ import CardRewards from '../../components/CardRewards';
 const toDoSomething = () => { return; };
 
 export default function Home({ navigation }) {
+    // TODO logic get data
 
     const navigationToChat = () => navigation.navigate('Assistant');
 
+    // TODO get saved order of buttons
     const buttonsMock = [
         {
             id: "assistenteVirtual",
@@ -86,30 +88,6 @@ export default function Home({ navigation }) {
 
     const [buttons, setButtons] = useState(buttonsMock);
 
-    const renderItem = useCallback(
-        ({ item, index, drag, isActive }) => {
-            return (
-                <TouchableOpacity
-                    key={item.id}
-                    style={[
-                        S.buttonCard, 
-                        {
-                            transform: isActive ? [{ rotate: "15deg" }] : [{ rotate: "0deg" }],
-                            backgroundColor: isActive ? darkPurple : cardPurple,
-                        },
-                    ]}
-                    onLongPress={drag}
-                    onPress={item.onPress} >
-                    {getIcon(item.icon)}
-                    <Text style={S.textButtonList}>
-                        {item.label}
-                    </Text>
-                </TouchableOpacity>
-            );
-        },
-        []
-    );
-    // TODO logic get data
     const dataStateSpending = {
         invoiceAmount: 339.4,
         availableLimitValue: 1534,
@@ -150,6 +128,28 @@ export default function Home({ navigation }) {
 
     const getIcon = iconKey => <FontAwesomeIcon icon={getIconByKey(iconKey)} size={24} color={white} />;
 
+    const renderItem = ({ item, index, drag, isActive }) => {
+        return (
+            <TouchableOpacity
+                key={item.id}
+                style={[
+                    S.buttonCard,
+                    {
+                        transform: isActive ? [{ rotate: "15deg" }] : [{ rotate: "0deg" }],
+                        backgroundColor: isActive ? darkPurple : cardPurple,
+                        elevation: isActive ? 5 : 0,
+                    },
+                ]}
+                onLongPress={drag}
+                onPress={item.onPress} >
+                {getIcon(item.icon)}
+                <Text style={S.textButtonList}>
+                    {item.label}
+                </Text>
+            </TouchableOpacity>
+        );
+    };
+
     return (
         <View style={S.container}>
             <View style={S.hearder}>
@@ -164,6 +164,9 @@ export default function Home({ navigation }) {
             <View style={S.buttonsList}>
                 <DraggableFlatList
                     horizontal
+                    contentContainerStyle={{paddingEnd: 15}}
+                    showsHorizontalScrollIndicator={false}
+                    activationDistance={30}
                     data={buttons}
                     renderItem={renderItem}
                     keyExtractor={(item, index) => `draggable-item-${item.id}`}
