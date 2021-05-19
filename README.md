@@ -38,13 +38,7 @@ https://www.behance.net/gallery/108239475/Nubank-Redesign-Assistente-Virtual
 
 ## Draggable Flat List
 
-![Nubank Redesign Assistente Virtual com React Native e DraggableFlatList](.github/images/nubankRedesignAssistenteVirtualComReactNativeDraggableFlatList.gif)
-
-
-<iframe width="250" height="450" src="https://www.youtube.com/embed/VCxxlZocMAM?controls=0" title="Nubank Redesign Assistente Virtual com React Native e DraggableFlatList" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-
-<img src=".github/images/nubankRedesignAssistenteVirtualComReactNativeDraggableFlatList.gif" width="250" height="450"/>
+<img alt="Nubank Redesign Assistente Virtual com React Native e DraggableFlatList" src=".github/images/nubankRedesignAssistenteVirtualComReactNativeDraggableFlatList.gif" width="250" height="450"/>
 
 ## #KeepRocking
 * #fullstack
