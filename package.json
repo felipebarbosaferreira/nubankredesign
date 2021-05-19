@@ -1,6 +1,6 @@
 {
   "main": "node_modules/expo/AppEntry.js",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Felipe Barbosa Ferreira",
   "description": "Projeto Nubank Redesign com React Native & Expo fazendo comunicação com o Agent Dialogflow",
   "scripts": {
@@ -21,20 +21,21 @@
     "expo-av": "~8.6.0",
     "expo-chart-kit": "^1.2.4",
     "expo-constants": "~9.2.0",
+    "expo-file-system": "~9.2.0",
     "expo-network": "~2.3.0",
     "expo-permissions": "~9.3.0",
+    "expo-speech": "~8.4.0",
     "expo-status-bar": "~1.0.2",
     "lottie-react-native": "~2.6.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.2.tar.gz",
+    "react-native-draggable-flatlist": "^2.6.2",
     "react-native-gesture-handler": "~1.7.0",
     "react-native-reanimated": "~1.13.0",
     "react-native-svg": "12.1.0",
     "react-native-web": "^0.13.14",
-    "react-navigation": "^4.4.1",
-    "expo-file-system": "~9.2.0",
-    "expo-speech": "~8.4.0"
+    "react-navigation": "^4.4.1"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"

@@ -1,11 +1,12 @@
-import React from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import DraggableFlatList from "react-native-draggable-flatlist";
 
 import nuSymbol from '../../assets/nu_symbol_offwhite.png';
 
 import S from './styles';
 
-import { white, } from '../../styles/colors';
+import { white, cardPurple, darkPurple } from '../../styles/colors';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
@@ -17,6 +18,7 @@ import {
     iconDonate,
     iconGamepad,
     iconPlus,
+    iconMobile,
 } from '../../utils/typeIcons';
 
 import Carousel from '../../components/Carousel';
@@ -25,9 +27,67 @@ import CardStateSpending from '../../components/CardStateSpending';
 import CardNuAccountState from '../../components/CardNuAccountState';
 import CardRewards from '../../components/CardRewards';
 
+const toDoSomething = () => { return; };
 
 export default function Home({ navigation }) {
     // TODO logic get data
+
+    const navigationToChat = () => navigation.navigate('Assistant');
+
+    // TODO get saved order of buttons
+    const buttonsMock = [
+        {
+            id: "assistenteVirtual",
+            label: "Assistente Virtual",
+            icon: iconRegularChat,
+            onPress: navigationToChat,
+        },
+        {
+            id: "conta",
+            label: "Conta",
+            icon: iconCoins,
+            onPress: toDoSomething,
+        },
+        {
+            id: "rewards",
+            label: "Rewards",
+            icon: iconGift,
+            onPress: toDoSomething,
+        },
+        {
+            id: "recarga",
+            label: "Recarga",
+            icon: iconMobile,
+            onPress: toDoSomething,
+        },
+        {
+            id: "cartaoVirtual",
+            label: "Cartão Virtual",
+            icon: iconRegularCreditCard,
+            onPress: toDoSomething,
+        },
+        {
+            id: "doar",
+            label: "Doar",
+            icon: iconDonate,
+            onPress: toDoSomething,
+        },
+        {
+            id: "felipe",
+            label: "Felipe",
+            icon: iconGamepad,
+            onPress: toDoSomething,
+        },
+        {
+            id: "plus",
+            label: "...",
+            icon: iconPlus,
+            onPress: toDoSomething,
+        },
+    ];
+
+    const [buttons, setButtons] = useState(buttonsMock);
+
     const dataStateSpending = {
         invoiceAmount: 339.4,
         availableLimitValue: 1534,
@@ -68,7 +128,27 @@ export default function Home({ navigation }) {
 
     const getIcon = iconKey => <FontAwesomeIcon icon={getIconByKey(iconKey)} size={24} color={white} />;
 
-    const navigationToChat = () => navigation.navigate('Assistant');
+    const renderItem = ({ item, index, drag, isActive }) => {
+        return (
+            <TouchableOpacity
+                key={item.id}
+                style={[
+                    S.buttonCard,
+                    {
+                        transform: isActive ? [{ rotate: "15deg" }] : [{ rotate: "0deg" }],
+                        backgroundColor: isActive ? darkPurple : cardPurple,
+                        elevation: isActive ? 5 : 0,
+                    },
+                ]}
+                onLongPress={drag}
+                onPress={item.onPress} >
+                {getIcon(item.icon)}
+                <Text style={S.textButtonList}>
+                    {item.label}
+                </Text>
+            </TouchableOpacity>
+        );
+    };
 
     return (
         <View style={S.container}>
@@ -81,45 +161,18 @@ export default function Home({ navigation }) {
                 <Carousel items={cards} />
             </View>
 
-            <ScrollView
-                style={S.buttonsList}
-                horizontal={true}
-                showsHorizontalScrollIndicator={false} >
-                <TouchableOpacity style={S.buttonCardFirst} onPress={() => navigationToChat()}>
-                    {getIcon(iconRegularChat)}
-                    <Text style={S.textButtonList}>Assistente Virtual</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={S.buttonCard}>
-                    {getIcon(iconRegularCreditCard)}
-                    <Text style={S.textButtonList}>Cartão Virtual</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={S.buttonCard}>
-                    {getIcon(iconCoins)}
-                    <Text style={S.textButtonList}>Conta</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={S.buttonCard}>
-                    {getIcon(iconGift)}
-                    <Text style={S.textButtonList}>Rewards</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={S.buttonCard}>
-                    {getIcon(iconDonate)}
-                    <Text style={S.textButtonList}>Doar</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={S.buttonCard}>
-                    {getIcon(iconGamepad)}
-                    <Text style={S.textButtonList}>Felipe</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={S.buttonCard}>
-                    {getIcon(iconPlus)}
-                    <Text style={S.textButtonList}>.</Text>
-                </TouchableOpacity>
-            </ScrollView>
+            <View style={S.buttonsList}>
+                <DraggableFlatList
+                    horizontal
+                    contentContainerStyle={{paddingEnd: 15}}
+                    showsHorizontalScrollIndicator={false}
+                    activationDistance={30}
+                    data={buttons}
+                    renderItem={renderItem}
+                    keyExtractor={(item, index) => `draggable-item-${item.id}`}
+                    onDragEnd={({ data }) => setButtons(data)}
+                />
+            </View>
         </View>
     )
 }
