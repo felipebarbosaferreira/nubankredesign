@@ -15,7 +15,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.1",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/react-native-fontawesome": "^0.2.5",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "date-fns": "^2.16.1",
     "expo": "~39.0.2",
     "expo-av": "~8.6.0",
